@@ -1,0 +1,150 @@
+.clock-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-xl);
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  transition: background var(--transition-normal);
+}
+
+.clock-header {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.page-title {
+  font-size: 2.5rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-sm);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.page-subtitle {
+  font-size: var(--font-size-large);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.clock-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.control-group {
+  display: flex;
+  justify-content: center;
+}
+
+.clock-main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 500px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .clock-page {
+    padding: var(--spacing-lg);
+  }
+
+  .clock-controls {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-md);
+  }
+}
+
+@media (max-width: 768px) {
+  .clock-page {
+    padding: var(--spacing-md);
+  }
+
+  .page-title {
+    font-size: 2rem;
+  }
+
+  .page-subtitle {
+    font-size: var(--font-size-base);
+  }
+
+  .clock-controls {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .control-group {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .clock-main {
+    min-height: 400px;
+  }
+}
+
+@media (max-width: 480px) {
+  .clock-page {
+    padding: var(--spacing-sm);
+  }
+
+  .clock-header {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .page-title {
+    font-size: 1.75rem;
+  }
+
+  .page-subtitle {
+    font-size: var(--font-size-base);
+  }
+
+  .clock-main {
+    min-height: 350px;
+  }
+}
+
+/* Dark theme adjustments */
+[data-theme="dark"] .clock-page {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+}
+
+[data-theme="dark"] .page-title {
+  text-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+
+/* Animation for page load */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.clock-page {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.clock-header {
+  animation: fadeInUp 0.6s ease-out 0.2s both;
+}
+
+.clock-controls {
+  animation: fadeInUp 0.6s ease-out 0.4s both;
+}
+
+.clock-main {
+  animation: fadeInUp 0.6s ease-out 0.6s both;
+}

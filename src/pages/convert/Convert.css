@@ -1,0 +1,14 @@
+.convert {
+  padding: var(--spacing-lg);
+  text-align: center;
+}
+
+.convert h1 {
+  color: var(--primary-color);
+  margin-bottom: var(--spacing-md);
+}
+
+.convert p {
+  color: var(--dark-color);
+  font-size: var(--font-size-large);
+}

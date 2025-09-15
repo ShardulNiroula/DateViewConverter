@@ -1,0 +1,14 @@
+.home {
+  padding: var(--spacing-lg);
+  text-align: center;
+}
+
+.home h1 {
+  color: var(--primary-color);
+  margin-bottom: var(--spacing-md);
+}
+
+.home p {
+  color: var(--dark-color);
+  font-size: var(--font-size-large);
+}

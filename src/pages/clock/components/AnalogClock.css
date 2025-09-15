@@ -1,0 +1,29 @@
+.analog-clock-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-lg);
+}
+
+.analog-clock {
+  filter: drop-shadow(var(--shadow-md));
+  transition: all var(--transition-normal);
+}
+
+.analog-clock:hover {
+  transform: scale(1.02);
+  filter: drop-shadow(var(--shadow-lg));
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .analog-clock-container {
+    padding: var(--spacing-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .analog-clock-container {
+    padding: var(--spacing-sm);
+  }
+}

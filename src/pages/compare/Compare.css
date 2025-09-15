@@ -1,0 +1,14 @@
+.compare {
+  padding: var(--spacing-lg);
+  text-align: center;
+}
+
+.compare h1 {
+  color: var(--primary-color);
+  margin-bottom: var(--spacing-md);
+}
+
+.compare p {
+  color: var(--dark-color);
+  font-size: var(--font-size-large);
+}

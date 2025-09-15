@@ -1,0 +1,216 @@
+.dropdown {
+  position: relative;
+  display: inline-block;
+  min-width: 200px;
+  z-index: 1;
+}
+
+.dropdown-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  outline: none;
+}
+
+.dropdown-toggle:hover:not(:disabled) {
+  border-color: var(--primary-color);
+  background-color: var(--bg-tertiary);
+}
+
+.dropdown-toggle.active {
+  border-color: var(--primary-color);
+  background-color: var(--bg-tertiary);
+  box-shadow: var(--shadow-sm);
+}
+
+.dropdown-toggle:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.dropdown-value {
+  flex: 1;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dropdown-arrow {
+  font-size: 12px;
+  transition: transform var(--transition-fast);
+  margin-left: var(--spacing-sm);
+}
+
+.dropdown-arrow.open {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu {
+  /* When rendered in a portal we still use same base styles but positioning is applied inline */
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background-color: var(--bg-primary);
+  border: 2px solid var(--border-color);
+  border-top: none;
+  border-radius: 0 0 var(--border-radius-md) var(--border-radius-md);
+  box-shadow: var(--shadow-lg);
+  max-height: 300px;
+  overflow-y: auto;
+  animation: slideDown 0.2s ease-out;
+  pointer-events: auto;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-item {
+  padding: var(--spacing-sm) var(--spacing-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border-bottom: 1px solid var(--border-light);
+  display: block;
+  width: 100%;
+  text-align: left;
+  position: relative;
+  z-index: 1;
+}
+
+/* Ensure the item and its inner custom content receive pointer events */
+.dropdown-item,
+.dropdown-item * {
+  pointer-events: auto;
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.dropdown-item:hover {
+  background-color: var(--bg-tertiary);
+  color: var(--primary-color);
+}
+
+.dropdown-item:hover * {
+  color: inherit;
+}
+
+.dropdown-item.selected {
+  background-color: var(--primary-color);
+  color: var(--text-inverse);
+  font-weight: var(--font-weight-bold);
+}
+
+.dropdown-item.selected:hover {
+  background-color: var(--primary-color);
+  color: var(--text-inverse);
+}
+
+/* Custom timezone option styling */
+.timezone-option {
+  width: 100%;
+}
+
+.timezone-main {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+.country-name {
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+}
+
+.city-name {
+  color: var(--text-secondary);
+  margin-left: 4px;
+}
+
+.timezone-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--font-size-small);
+}
+
+.timezone-name {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.timezone-offset {
+  color: var(--primary-color);
+  font-weight: var(--font-weight-bold);
+  background-color: var(--bg-tertiary);
+  padding: 2px 6px;
+  border-radius: var(--border-radius-sm);
+  font-size: 11px;
+}
+
+/* Focus states */
+.dropdown-toggle:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+.dropdown-item:focus {
+  outline: none;
+  background-color: var(--bg-tertiary);
+}
+
+/* Scrollbar styling */
+.dropdown-menu::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dropdown-menu::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+.dropdown-menu::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--border-radius-sm);
+}
+
+.dropdown-menu::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .dropdown {
+    min-width: 100%;
+    z-index: 1001;
+  }
+
+  .dropdown-menu {
+    position: fixed;
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
+    max-height: 70vh;
+    z-index: 1002;
+  }
+}

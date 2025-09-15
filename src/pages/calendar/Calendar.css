@@ -1,0 +1,14 @@
+.calendar {
+  padding: var(--spacing-lg);
+  text-align: center;
+}
+
+.calendar h1 {
+  color: var(--primary-color);
+  margin-bottom: var(--spacing-md);
+}
+
+.calendar p {
+  color: var(--dark-color);
+  font-size: var(--font-size-large);
+}

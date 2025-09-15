@@ -1,0 +1,200 @@
+.country-selector {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  min-width: 280px;
+  max-width: 400px;
+}
+
+.country-label {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.search-container {
+  position: relative;
+  z-index: 1;
+}
+
+.timezone-search {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  transition: all var(--transition-fast);
+  box-sizing: border-box;
+}
+
+.timezone-search:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+}
+
+.timezone-search::placeholder {
+  color: var(--text-muted);
+}
+
+.country-dropdown {
+  width: 100%;
+  margin-top: var(--spacing-xs);
+}
+
+.timezone-option {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--spacing-xs) 0;
+}
+
+.timezone-main {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.country-name {
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+}
+
+.city-name {
+  color: var(--text-secondary);
+  font-size: var(--font-size-small);
+}
+
+.timezone-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.timezone-name {
+  font-size: var(--font-size-small);
+  color: var(--text-muted);
+  font-family: monospace;
+}
+
+.timezone-offset {
+  font-size: var(--font-size-small);
+  color: var(--primary-color);
+  font-weight: var(--font-weight-bold);
+  background-color: var(--bg-tertiary);
+  padding: 2px var(--spacing-xs);
+  border-radius: var(--border-radius-sm);
+}
+
+.timezone-info {
+  margin-top: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background-color: var(--bg-tertiary);
+  border-radius: var(--border-radius-md);
+  border: 1px solid var(--border-light);
+}
+
+.selected-timezone {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-xs);
+}
+
+.selected-country {
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+}
+
+.selected-city {
+  color: var(--text-secondary);
+  font-size: var(--font-size-small);
+}
+
+.selected-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.selected-timezone-name {
+  font-size: var(--font-size-small);
+  color: var(--text-muted);
+  font-family: monospace;
+}
+
+.selected-offset {
+  font-size: var(--font-size-small);
+  color: var(--primary-color);
+  font-weight: var(--font-weight-bold);
+  background-color: var(--bg-secondary);
+  padding: 2px var(--spacing-xs);
+  border-radius: var(--border-radius-sm);
+}
+
+.popular-hint {
+  margin-top: var(--spacing-xs);
+  text-align: center;
+  opacity: 0.7;
+}
+
+.popular-hint small {
+  color: var(--text-muted);
+  font-size: var(--font-size-small);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .country-selector {
+    min-width: 250px;
+    max-width: 350px;
+  }
+
+  .country-label {
+    font-size: var(--font-size-small);
+  }
+
+  .timezone-search {
+    font-size: var(--font-size-small);
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+
+  .country-name {
+    font-size: var(--font-size-small);
+  }
+
+  .city-name {
+    font-size: 12px;
+  }
+
+  .timezone-name,
+  .timezone-offset {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .country-selector {
+    min-width: 220px;
+    max-width: 300px;
+  }
+
+  .timezone-main {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  .timezone-details {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+}
