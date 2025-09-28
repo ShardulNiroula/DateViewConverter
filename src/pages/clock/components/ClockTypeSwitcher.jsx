@@ -31,9 +31,6 @@ const ClockTypeSwitcher = ({ clockType, onClockTypeChange }) => {
           Analog
         </Button>
       </div>
-      <div className="type-description">
-        {clockType === 'digital' ? 'Digital clock display' : 'Analog clock display'}
-      </div>
     </div>
   );
 };

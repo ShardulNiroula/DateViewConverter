@@ -1,7 +1,7 @@
 import React from 'react';
 import './DigitalClock.css';
 
-const DigitalClock = ({ time, format = '24', showDate = true, showSeconds = true }) => {
+const DigitalClock = ({ time, format = '24', showDate = true, showSeconds = true, hideLive = false, hideFormat = false }) => {
   const formatTime = (momentTime) => {
     if (format === '12') {
       return momentTime.format(showSeconds ? 'hh:mm:ss A' : 'hh:mm A');
@@ -17,9 +17,11 @@ const DigitalClock = ({ time, format = '24', showDate = true, showSeconds = true
   return (
     <div className="digital-clock-container">
       <div className="digital-clock">
-        <div className="time-display">
+        <div className={`time-display ${format === '12' ? 'time-12h' : 'time-24h'}`}> 
           {formatTime(time)}
         </div>
+
+        
 
         {showDate && (
           <div className="date-display">
@@ -27,9 +29,11 @@ const DigitalClock = ({ time, format = '24', showDate = true, showSeconds = true
           </div>
         )}
 
-        <div className="format-indicator">
-          {format === '12' ? '12H' : '24H'}
-        </div>
+        {!hideFormat && (
+          <div className="format-indicator">
+            {format === '12' ? '12H' : '24H'}
+          </div>
+        )}
       </div>
     </div>
   );

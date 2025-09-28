@@ -1,61 +1,38 @@
 .clock-type-switcher {
+  width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: var(--spacing-md);
-  padding: var(--spacing-md);
-  background-color: var(--bg-secondary);
-  border-radius: var(--border-radius-md);
-  border: 1px solid var(--border-color);
-  min-width: 200px;
+  gap: 10px;
+  padding: 0px 18px;
+  background:transparent;
 }
 
 .switcher-buttons {
-  display: flex;
-  gap: var(--spacing-sm);
-  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+  padding: 6px;
+  border-radius: var(--border-radius-pill);
+  background: rgba(17, 115, 212, 0.12);
 }
 
 .type-button {
-  flex: 1;
-  font-weight: var(--font-weight-bold);
-  transition: all var(--transition-fast);
-}
-
-.type-button:hover {
-  transform: translateY(-1px);
+  font-weight: var(--font-weight-semibold);
+  border-radius: var(--border-radius-pill);
+  width: 100%;
 }
 
 .type-description {
-  font-size: var(--font-size-small);
+  font-size: 0.82rem;
   color: var(--text-secondary);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.4;
   text-align: center;
-  font-style: italic;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .clock-type-switcher {
-    padding: var(--spacing-sm);
-    min-width: 180px;
-  }
-
-  .switcher-buttons {
-    flex-direction: column;
-    gap: var(--spacing-xs);
-  }
-
-  .type-button {
     width: 100%;
-  }
-
-  .type-description {
-    font-size: 11px;
-  }
-}
-
-@media (max-width: 480px) {
-  .clock-type-switcher {
-    min-width: 160px;
+    padding: clamp(12px, 4vw, 18px);
   }
 }

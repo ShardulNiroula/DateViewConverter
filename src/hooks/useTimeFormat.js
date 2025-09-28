@@ -1,7 +1,14 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
-const useTimeFormat = (initialFormat = '24') => {
-  const [format, setFormat] = useState(initialFormat);
+const useTimeFormat = (initialFormat = '12') => {
+  const [format, setFormat] = useState(() => {
+    const saved = localStorage.getItem('timeFormat');
+    return saved || initialFormat;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('timeFormat', format);
+  }, [format]);
 
   const toggleFormat = useCallback(() => {
     setFormat(prev => prev === '12' ? '24' : '12');

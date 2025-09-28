@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useLayoutEffect, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useLayoutEffect, useMemo, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { List } from 'react-window';
 import './Dropdown.css';
@@ -21,14 +21,17 @@ const Dropdown = ({
 
   // Use external state if provided, otherwise use internal state
   const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
-  const setIsOpen = (value) => {
-    if (externalIsOpen === undefined) {
-      setInternalIsOpen(value);
-    }
-    if (onOpenChange) {
-      onOpenChange(value);
-    }
-  };
+  const setIsOpen = useCallback(
+    (value) => {
+      if (externalIsOpen === undefined) {
+        setInternalIsOpen(value);
+      }
+      if (onOpenChange) {
+        onOpenChange(value);
+      }
+    },
+    [externalIsOpen, onOpenChange]
+  );
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -41,31 +44,30 @@ const Dropdown = ({
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  }, [setIsOpen]);
 
   useLayoutEffect(() => {
     if (isOpen && toggleRef.current) {
       const rect = toggleRef.current.getBoundingClientRect();
-      const newMenuStyle = {
+      setMenuStyle({
         top: rect.bottom + window.scrollY,
         left: rect.left + window.scrollX,
         width: rect.width
-      };
-      console.log('Menu style calculated:', newMenuStyle);
-      setMenuStyle(newMenuStyle);
+      });
     } else {
       setMenuStyle(null);
     }
   }, [isOpen]);
 
-  const handleSelect = (option) => {
-    console.log('Selected option:', option);
-    onChange(option);
-    setIsOpen(false);
-  };
+  const handleSelect = useCallback(
+    (option) => {
+      onChange(option);
+      setIsOpen(false);
+    },
+    [onChange, setIsOpen]
+  );
 
   const selectedOption = options.find(option => option.value === value);
-  console.log('Dropdown render - isOpen:', isOpen, 'options length:', options.length, 'selectedOption:', selectedOption);
 
   // Define RowComponent for react-window List
   const RowComponent = useMemo(() => ({ index, style }) => {
@@ -96,7 +98,6 @@ const Dropdown = ({
         ref={toggleRef}
         className={`dropdown-toggle ${isOpen ? 'active' : ''}`}
         onClick={() => {
-          console.log('Toggle clicked, current isOpen:', isOpen);
           !disabled && setIsOpen(!isOpen);
         }}
         disabled={disabled}
@@ -124,7 +125,6 @@ const Dropdown = ({
             zIndex: 9999
           }}
         >
-          {console.log('Rendering dropdown with options:', options.length, 'filtered length:', options.length > 80 ? 'using virtualization' : 'using regular list')}
           {options.length > 80 ? (
             <List
               defaultHeight={Math.min(400, options.length * 48)}

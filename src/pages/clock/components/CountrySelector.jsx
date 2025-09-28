@@ -1,144 +1,185 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Dropdown } from '../../../components/ui';
-import TimezoneService from '../../../services/TimezoneService';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import usePresetTimezones from '../../../hooks/usePresetTimezones';
 import './CountrySelector.css';
 
-const CountrySelector = ({ selectedTimezone, onTimezoneChange }) => {
-  const [searchQuery, setSearchQuery] = useState('');
+const formatOptionLabel = (option) => `${option.city}, ${option.country} (${option.gmtLabel})`;
+
+const CountrySelector = ({
+  selectedTimezone,
+  onTimezoneChange,
+  hideLabel = false,
+  label = 'Select Timezone',
+  className
+}) => {
+  const { timezones, searchTimezones } = usePresetTimezones();
   const [isOpen, setIsOpen] = useState(false);
-  const [allOptions, setAllOptions] = useState([]);
-  const [popularOptions, setPopularOptions] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [hasTyped, setHasTyped] = useState(false);
+  const containerRef = useRef(null);
+  const inputRef = useRef(null);
+
+  const containerClassName = ['country-selector', className].filter(Boolean).join(' ');
+
+  const selectedOption = useMemo(
+    () => timezones.find((timezone) => timezone.value === selectedTimezone) || null,
+    [timezones, selectedTimezone]
+  );
+
+  const effectiveSearchTerm = hasTyped ? searchTerm : '';
+
+  const filteredTimezones = useMemo(
+    () => searchTimezones(effectiveSearchTerm),
+    [effectiveSearchTerm, searchTimezones]
+  );
 
   useEffect(() => {
-    // Load popular timezones first for quick access
-    const popular = TimezoneService.getPopularTimezones();
-    setPopularOptions(popular);
-    console.log('Popular options loaded:', popular.length);
+    if (isOpen) {
+      requestAnimationFrame(() => {
+        if (inputRef.current) {
+          inputRef.current.focus();
+          inputRef.current.select();
+        }
+      });
+    }
+  }, [isOpen]);
 
-    // Load all options in background
-    const loadAllOptions = async () => {
-      const options = TimezoneService.getCountryOptions();
-      console.log('All options loaded:', options.length);
-      setAllOptions(options);
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (containerRef.current && !containerRef.current.contains(event.target)) {
+        setIsOpen(false);
+        setHasTyped(false);
+        setSearchTerm('');
+      }
     };
 
-    loadAllOptions();
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Filter options based on search query
-  const filteredOptions = useMemo(() => {
-    // If there's no search query, show the full list when dropdown is open
-    if (!searchQuery.trim()) {
-      const result = isOpen ? allOptions : popularOptions;
-      console.log('Filtered options (no search):', result.length, 'isOpen:', isOpen);
-      return result;
-    }
-
-    const query = searchQuery.toLowerCase();
-    const allFiltered = allOptions.filter(option =>
-      option.label.toLowerCase().includes(query) ||
-      option.country.toLowerCase().includes(query) ||
-      option.city.toLowerCase().includes(query) ||
-      option.timezone.toLowerCase().includes(query)
-    );
-
-    // If no results in all options, also search popular
-    const popularFiltered = popularOptions.filter(option =>
-      option.label.toLowerCase().includes(query) ||
-      option.country.toLowerCase().includes(query) ||
-      option.city.toLowerCase().includes(query) ||
-      option.timezone.toLowerCase().includes(query)
-    );
-
-    // Combine and deduplicate
-    const combined = [...popularFiltered, ...allFiltered];
-    const unique = combined.filter((option, index, self) =>
-      index === self.findIndex(o => o.value === option.value)
-    );
-
-    const result = unique.slice(0, 50); // Limit results for performance
-    console.log('Filtered options (with search):', result.length, 'query:', query);
-    return result;
-  }, [searchQuery, allOptions, popularOptions, isOpen]);
-
-  const handleTimezoneChange = (option) => {
-    onTimezoneChange(option.value);
-    setSearchQuery('');
-    setIsOpen(false);
-  };
-
-  const handleSearchChange = (query) => {
-    setSearchQuery(query);
+  const handleInputFocus = () => {
     setIsOpen(true);
+    setHasTyped(false);
+    const label = selectedOption ? formatOptionLabel(selectedOption) : '';
+    setSearchTerm(label);
   };
 
-  const selectedOption = useMemo(() => {
-    return [...popularOptions, ...allOptions].find(option => option.value === selectedTimezone);
-  }, [selectedTimezone, popularOptions, allOptions]);
+  const handleInputChange = (event) => {
+    setHasTyped(true);
+    setSearchTerm(event.target.value);
+  };
 
-  const customOptions = filteredOptions.map(option => ({
-    ...option,
-    label: `${option.country} - ${option.city} (${option.timezone.replace('_', ' ')})`,
-    customLabel: (
-      <div className="timezone-option">
-        <div className="timezone-main">
-          <span className="country-name">{option.country}</span>
-          <span className="city-name"> - {option.city}</span>
-        </div>
-        <div className="timezone-details">
-          <span className="timezone-name">{option.timezone.replace('_', ' ')}</span>
-          <span className="timezone-offset">{option.label.split('(')[1]?.replace(')', '')}</span>
-        </div>
-      </div>
-    )
-  }));
+  const handleInputMouseDown = (event) => {
+    if (isOpen) {
+      event.preventDefault();
+      setIsOpen(false);
+      setHasTyped(false);
+      setSearchTerm('');
+      inputRef.current?.blur();
+    }
+  };
+
+  const handleInputBlur = () => {
+    setTimeout(() => {
+      if (!containerRef.current?.contains(document.activeElement)) {
+        setIsOpen(false);
+        setHasTyped(false);
+        setSearchTerm('');
+      }
+    }, 120);
+  };
+
+  const handleToggleMouseDown = (event) => {
+    event.preventDefault();
+    if (isOpen) {
+      setIsOpen(false);
+      setHasTyped(false);
+      setSearchTerm('');
+      inputRef.current?.blur();
+    } else {
+      inputRef.current?.focus();
+    }
+  };
+
+  const handleOptionSelect = (option) => {
+    onTimezoneChange(option.value);
+    setIsOpen(false);
+    setHasTyped(false);
+    setSearchTerm('');
+    inputRef.current?.blur();
+  };
+
+  const inputValue = isOpen
+    ? searchTerm
+    : selectedOption
+    ? formatOptionLabel(selectedOption)
+    : '';
+
+  const optionsToRender = filteredTimezones;
 
   return (
-    <div className="country-selector">
-      <label className="country-label">Select Timezone</label>
+    <div className={containerClassName} ref={containerRef}>
+      {!hideLabel && (
+        <div className="selector-label-group">
+          <span className="selector-label">{label}</span>
+        </div>
+      )}
 
-      <div className="search-container">
+      <div className={`selector-input ${isOpen ? 'selector-input--open' : ''}`}>
         <input
+          ref={inputRef}
           type="text"
-          className="timezone-search"
+          className="selector-input-field"
           placeholder="Search countries, cities, or timezones..."
-          value={searchQuery}
-          onChange={(e) => handleSearchChange(e.target.value)}
-          onFocus={() => setIsOpen(true)}
+          value={inputValue}
+          onMouseDown={handleInputMouseDown}
+          onFocus={handleInputFocus}
+          onChange={handleInputChange}
+          onBlur={handleInputBlur}
         />
+        <button
+          type="button"
+          className={`selector-toggle ${isOpen ? 'selector-toggle--open' : ''}`}
+          onMouseDown={handleToggleMouseDown}
+          aria-label={isOpen ? 'Close timezone list' : 'Open timezone list'}
+        >
+          <span aria-hidden="true">⌄</span>
+        </button>
       </div>
 
-      <Dropdown
-        options={customOptions}
-        value={selectedTimezone}
-        onChange={handleTimezoneChange}
-        placeholder="Choose a timezone..."
-        className="country-dropdown"
-        isOpen={isOpen}
-        onOpenChange={setIsOpen}
-      />
-
-      {selectedOption && (
-        <div className="timezone-info">
-          <div className="selected-timezone">
-            <span className="selected-country">{selectedOption.country}</span>
-            <span className="selected-city"> - {selectedOption.city}</span>
-          </div>
-          <div className="selected-details">
-            <span className="selected-timezone-name">{selectedOption.timezone.replace('_', ' ')}</span>
-            <span className="selected-offset">
-              {selectedOption.label.split('(')[1]?.replace(')', '')}
-            </span>
-          </div>
+      {isOpen && (
+        <div className="selector-dropdown" role="listbox">
+          {optionsToRender.length > 0 ? (
+            <ul>
+              {optionsToRender.map((option) => (
+                <li
+                  key={option.value}
+                  className={`selector-option ${
+                    option.value === selectedOption?.value ? 'selector-option--active' : ''
+                  }`}
+                  onMouseDown={(event) => event.preventDefault()}
+                  onClick={() => handleOptionSelect(option)}
+                  role="option"
+                  aria-selected={option.value === selectedOption?.value}
+                >
+                  <div className="selector-option-main">
+                    <span className="selector-option-city">{option.city}</span>
+                    <span className="selector-option-country">{option.country}</span>
+                  </div>
+                  <div className="selector-option-meta">
+                    <span className="selector-option-offset">{option.gmtLabel}</span>
+                    <span className="selector-option-code">{option.value}</span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="selector-empty">No results found. Try another search.</div>
+          )}
         </div>
       )}
 
-      {!searchQuery && (
-        <div className="popular-hint">
-          <small>💡 Search or browse popular timezones above</small>
-        </div>
-      )}
     </div>
+
   );
 };
 

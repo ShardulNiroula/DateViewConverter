@@ -1,14 +1,300 @@
-.compare {
-  padding: var(--spacing-lg);
-  text-align: center;
+.compare-page {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(32px, 4vw, 48px);
+  padding: clamp(24px, 6vw, 64px) clamp(20px, 8vw, 80px) clamp(40px, 10vw, 96px);
+  background: linear-gradient(135deg, rgba(17, 115, 212, 0.05) 0%, rgba(255, 255, 255, 0.95) 45%, rgba(243, 246, 255, 1) 100%);
+  min-height: calc(100vh - 160px);
 }
 
-.compare h1 {
+.compare-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.compare-headline {
+  max-width: 520px;
+}
+
+.compare-title {
+  margin: 0 0 12px 0;
+  font-size: clamp(2rem, 3vw, 2.75rem);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+}
+
+.compare-subtitle {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.compare-actions {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.compare-swap {
+  min-width: 160px;
+}
+
+.compare-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: clamp(20px, 4vw, 32px);
+}
+
+.compare-card {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: clamp(20px, 3vw, 28px);
+  border-radius: var(--border-radius-lg);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(17, 115, 212, 0.15);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(12px);
+  min-width: 0;
+}
+
+.compare-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.compare-card .digital-clock-container,
+.compare-card .digital-clock {
+  height: auto;
+}
+
+.compare-card .digital-clock {
+  padding: clamp(18px, 4vw, 26px);
+}
+
+.compare-card .time-display {
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: clamp(1.8rem, 6.5vw, 4.4rem);
+  letter-spacing: 0.04em;
+  gap: clamp(6px, 3vw, 14px);
+}
+
+.compare-card .time-display.time-12h {
+  font-size: clamp(1.6rem, 6vw, 4rem);
+  letter-spacing: 0.035em;
+}
+
+.compare-card .digital-clock-container {
+  justify-content: center;
+}
+
+@media (max-width: 1200px) {
+  .compare-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .compare-card .time-display {
+    font-size: clamp(1.5rem, 8vw, 3.4rem);
+    letter-spacing: 0.025em;
+  }
+
+  .compare-card .time-display.time-12h {
+    font-size: clamp(1.4rem, 7vw, 3.2rem);
+  }
+}
+
+@media (max-width: 520px) {
+  .compare-card .digital-clock {
+    padding: clamp(16px, 6vw, 22px);
+  }
+
+  .compare-card .time-display {
+    font-size: clamp(1.2rem, 12vw, 2.4rem);
+    letter-spacing: 0.02em;
+    gap: 4px;
+  }
+
+  .compare-card .time-display.time-12h {
+    font-size: clamp(1.1rem, 11vw, 2.2rem);
+  }
+}
+
+@media (max-width: 500px) {
+  .compare-page {
+    padding: clamp(12px, 5vw, 20px);
+  }
+
+  .compare-card {
+    gap: 16px;
+    padding: clamp(14px, 6vw, 20px);
+  }
+
+  .compare-card-body {
+    gap: 16px;
+  }
+
+  .compare-card-header h2 {
+    font-size: clamp(1.2rem, 5vw, 1.4rem);
+  }
+
+  .compare-card-offset {
+    padding: 4px 10px;
+    font-size: 0.75rem;
+  }
+
+  .compare-card-footer {
+    padding: 10px 12px;
+  }
+}
+
+.compare-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.compare-card-header h2 {
+  margin: 0;
+  font-size: clamp(1.4rem, 2vw, 1.8rem);
+  color: var(--text-primary);
+}
+
+.compare-card-subtitle {
+  display: block;
+  margin-top: 6px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.compare-card-offset {
+  align-self: flex-start;
+  padding: 6px 12px;
+  border-radius: var(--border-radius-pill);
+  background: rgba(17, 115, 212, 0.12);
   color: var(--primary-color);
-  margin-bottom: var(--spacing-md);
+  font-weight: var(--font-weight-semibold);
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
-.compare p {
-  color: var(--dark-color);
-  font-size: var(--font-size-large);
+.compare-card-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: var(--border-radius-md);
+  background: rgba(17, 115, 212, 0.06);
+  border: 1px dashed rgba(17, 115, 212, 0.25);
+}
+
+.compare-card-code {
+  font-family: 'JetBrains Mono', 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.compare-card-description {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.compare-difference {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: clamp(24px, 4vw, 40px);
+  border-radius: var(--border-radius-lg);
+  background: linear-gradient(135deg, rgba(17, 115, 212, 0.16) 0%, rgba(17, 115, 212, 0.05) 100%);
+  border: 1px solid rgba(17, 115, 212, 0.18);
+  text-align: center;
+  box-shadow: var(--shadow-md);
+}
+
+.difference-label {
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.75rem;
+  color: var(--primary-color);
+  font-weight: var(--font-weight-semibold);
+}
+
+.difference-value {
+  margin: 0;
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+}
+
+.difference-description {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  max-width: 520px;
+}
+
+@media (max-width: 960px) {
+  .compare-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .compare-swap {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 720px) {
+  .compare-page {
+    padding: clamp(16px, 6vw, 32px);
+  }
+
+  .compare-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .compare-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .compare-swap {
+    width: 100%;
+  }
+
+  .compare-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+[data-theme="dark"] .compare-page {
+  background: linear-gradient(135deg, rgba(16, 25, 34, 0.92) 0%, rgba(17, 115, 212, 0.12) 45%, rgba(16, 25, 34, 1) 100%);
+}
+
+[data-theme="dark"] .compare-card {
+  background: rgba(23, 34, 48, 0.9);
+  border-color: rgba(61, 167, 255, 0.18);
+}
+
+[data-theme="dark"] .compare-card-footer {
+  background: rgba(61, 167, 255, 0.08);
+  border-color: rgba(61, 167, 255, 0.3);
+}
+
+[data-theme="dark"] .compare-difference {
+  background: linear-gradient(135deg, rgba(61, 167, 255, 0.2) 0%, rgba(16, 25, 34, 0.95) 100%);
+  border-color: rgba(61, 167, 255, 0.22);
 }
