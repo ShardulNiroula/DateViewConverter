@@ -457,12 +457,6 @@
   }
 }
 
-@media (max-width: 960px) {
-  .header-actions .support-button {
-    display: none;
-  }
-}
-
 .theme-toggle {
   width: 42px;
   height: 42px;
@@ -577,6 +571,16 @@
 
   .header-actions {
     gap: 12px;
+  }
+
+  .header-actions .support-button {
+    padding: 8px 18px;
+    font-size: 0.9rem;
+    box-shadow: 0 10px 20px rgba(249, 115, 115, 0.22);
+  }
+
+  .theme-toggle {
+    display: none;
   }
 
   .mobile-nav {

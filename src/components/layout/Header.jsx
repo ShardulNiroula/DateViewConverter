@@ -298,15 +298,6 @@ const Header = () => {
             </button>
           </div>
 
-          <Link
-            to="/support"
-            className="support-button support-button-mobile"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            <SupportIcon className="support-button-icon" aria-hidden="true" />
-            <span>Support us</span>
-          </Link>
-
           <nav className="mobile-nav-links" aria-label="Primary navigation">
             {renderNavItems(() => setIsMenuOpen(false))}
           </nav>
