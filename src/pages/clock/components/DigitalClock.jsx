@@ -1,7 +1,7 @@
 import React from 'react';
 import './DigitalClock.css';
 
-const DigitalClock = ({ time, format = '24', showDate = true, showSeconds = true, hideLive = false, hideFormat = false }) => {
+const DigitalClock = ({ time, format = '24', showDate = true, showSeconds = true, hideFormat = false }) => {
   const formatTime = (momentTime) => {
     if (format === '12') {
       return momentTime.format(showSeconds ? 'hh:mm:ss A' : 'hh:mm A');

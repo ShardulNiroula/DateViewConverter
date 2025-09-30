@@ -5,11 +5,18 @@ import { Button } from '../../components/ui';
 import CountrySelector from '../clock/components/CountrySelector';
 import useTimeConversion from '../../hooks/useTimeConversion';
 
-const TIME_PARTS = [
-  { key: 'hours', label: 'Hours', placeholder: 'HH', min: 0, max: 23 },
-  { key: 'minutes', label: 'Minutes', placeholder: 'MM', min: 0, max: 59 },
-  { key: 'seconds', label: 'Seconds', placeholder: 'SS', min: 0, max: 59 }
-];
+const TIME_PARTS_BY_FORMAT = {
+  '12': [
+    { key: 'hours', label: 'Hours', placeholder: 'HH', min: 1, max: 12 },
+    { key: 'minutes', label: 'Minutes', placeholder: 'MM', min: 0, max: 59 },
+    { key: 'seconds', label: 'Seconds', placeholder: 'SS', min: 0, max: 59 }
+  ],
+  '24': [
+    { key: 'hours', label: 'Hours', placeholder: 'HH', min: 0, max: 23 },
+    { key: 'minutes', label: 'Minutes', placeholder: 'MM', min: 0, max: 59 },
+    { key: 'seconds', label: 'Seconds', placeholder: 'SS', min: 0, max: 59 }
+  ]
+};
 
 const Convert = () => {
   const {
@@ -52,6 +59,8 @@ const Convert = () => {
   const handleTimeInputChange = (part) => (event) => {
     setTimePart(part, event.target.value);
   };
+
+  const timeParts = TIME_PARTS_BY_FORMAT[format] || TIME_PARTS_BY_FORMAT['24'];
 
   return (
     <div className="convert-page">
@@ -103,7 +112,7 @@ const Convert = () => {
             </div>
 
             <div className="convert-time-inputs" role="group" aria-label="Source time">
-              {TIME_PARTS.map((part, index) => (
+              {timeParts.map((part, index) => (
                 <React.Fragment key={part.key}>
                   <div className="convert-time-field">
                     <label htmlFor={`convert-${part.key}`}>{part.label}</label>
@@ -119,11 +128,25 @@ const Convert = () => {
                       onChange={handleTimeInputChange(part.key)}
                     />
                   </div>
-                  {index < TIME_PARTS.length - 1 && (
+                  {index < timeParts.length - 1 && (
                     <span className="convert-time-separator" aria-hidden="true">:</span>
                   )}
                 </React.Fragment>
               ))}
+              {format === '12' && (
+                <div className="convert-time-field convert-meridiem-field">
+                  <label htmlFor="convert-meridiem">Period</label>
+                  <select
+                    id="convert-meridiem"
+                    name="meridiem"
+                    value={timeValues.meridiem}
+                    onChange={(event) => setTimePart('meridiem', event.target.value)}
+                  >
+                    <option value="AM">AM</option>
+                    <option value="PM">PM</option>
+                  </select>
+                </div>
+              )}
             </div>
 
             <div className="convert-date-field">

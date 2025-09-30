@@ -63,6 +63,17 @@ const ConvertIcon = ({ className = '', ...props }) => (
   </svg>
 );
 
+const SupportIcon = ({ className = '', ...props }) => (
+  <svg
+    viewBox="0 0 24 24"
+    className={className}
+    {...ICON_PROPS}
+    {...props}
+  >
+    <path d="M12 20.25s-6.75-4.05-6.75-9a3.75 3.75 0 0 1 6.6-2.34L12 9.45l.15-.54a3.75 3.75 0 0 1 6.6 2.34c0 4.95-6.75 9-6.75 9Z" />
+  </svg>
+);
+
 const MenuIcon = ({ className = '', ...props }) => (
   <svg
     viewBox="0 0 24 24"
@@ -147,7 +158,8 @@ const Header = () => {
 
   const renderNavItems = (onNavigate) => (
     <ul className="nav-list">
-      {NAV_LINKS.map(({ to, label, Icon }) => {
+      {NAV_LINKS.map((link) => {
+        const { to, label } = link;
         const linkProps = to === '/' ? { end: true } : {};
         const handleClick = onNavigate ? () => onNavigate() : undefined;
 
@@ -167,7 +179,7 @@ const Header = () => {
               }
               onClick={handleClick}
             >
-              <Icon className="nav-icon" />
+              <link.Icon className="nav-icon" />
               <span className="nav-link-label">{label}</span>
             </NavLink>
           </li>
@@ -184,7 +196,7 @@ const Header = () => {
           viewBox="0 0 24 24"
           aria-hidden="true"
         >
-          <path
+          <path className='theme-icon-sun'
             d="M21 12.79A9 9 0 0 1 11.21 3 7 7 0 1 0 21 12.79Z"
             fill="currentColor"
           />
@@ -198,7 +210,7 @@ const Header = () => {
         viewBox="0 0 24 24"
         aria-hidden="true"
       >
-        <path
+        <path className='theme-icon-moon'
           d="M12 4a1 1 0 0 1-1-1V2a1 1 0 0 1 2 0v1a1 1 0 0 1-1 1Zm5.657 2.343a1 1 0 0 1 0-1.414l.707-.707a1 1 0 1 1 1.414 1.414l-.707.707a1 1 0 0 1-1.414 0ZM12 20a1 1 0 0 1 1 1v1a1 1 0 0 1-2 0v-1a1 1 0 0 1 1-1Zm8-8a1 1 0 0 1 1-1h1a1 1 0 1 1 0 2h-1a1 1 0 0 1-1-1Zm-8-6a6 6 0 1 1 0 12 6 6 0 0 1 0-12ZM4 13H3a1 1 0 1 1 0-2h1a1 1 0 0 1 0 2Zm1.636 6.364a1 1 0 0 1 0-1.414l.707-.707a1 1 0 0 1 1.414 1.414l-.707.707a1 1 0 0 1-1.414 0Zm0-12.728L4.93 5.93A1 1 0 1 1 3.515 4.515l.707-.707a1 1 0 1 1 1.414 1.414ZM18.364 19.95l-.707-.707a1 1 0 0 1 1.414-1.414l.707.707a1 1 0 1 1-1.414 1.414Z"
           fill="currentColor"
         />
@@ -210,30 +222,13 @@ const Header = () => {
     <>
       <header className="header">
         <div className="header-container">
-          <Link to="/" className="brand" aria-label="TimeWise home">
+          <Link to="/" className="brand" aria-label="OClock home">
             <div className="brand-icon" aria-hidden="true">
-              <svg viewBox="0 0 48 48">
-                <g clipPath="url(#clip0)">
-                  <path
-                    d="M42.17 20.17 27.83 5.83c1.31 1.31.57 4.36-1.63 7.94-1.35 2.19-3.25 4.58-5.55 6.88s-4.69 4.21-6.88 5.55c-3.58 2.2-6.63 2.94-7.94 1.63L20.17 42.17c1.31 1.31 4.36.57 7.94-1.63 2.19-1.35 4.58-3.25 6.88-5.55s4.21-4.69 5.55-6.88c2.2-3.58 2.94-6.63 1.63-7.94Z"
-                    fill="currentColor"
-                  />
-                  <path
-                    d="M7.24 26.41c.07.03.4.16 1.28-.03 1.07-.23 2.51-.85 4.19-1.88 2.04-1.25 4.3-3.02 6.52-5.24 2.22-2.22 4-4.48 5.24-6.52 1.03-1.69 1.65-3.12 1.88-4.19.19-.88.06-1.2.03-1.28-.06-.03-.26-.1-.74-.05-.7.07-1.67.35-2.89.95-2.43 1.17-5.43 3.34-8.34 6.25s-5.08 5.91-6.25 8.34c-.6 1.22-.88 2.19-.95 2.89-.05.48.02.68.05.74Zm22.66-15.68c-.44 1.3-1.13 2.66-1.99 4.06-1.44 2.35-3.44 4.87-5.85 7.28-2.41 2.41-4.93 4.41-7.28 5.85-1.4.86-2.76 1.55-4.06 1.99L21.58 40.75c.02.01.32.18 1.29-.02 1.07-.23 2.51-.85 4.19-1.88 2.04-1.25 4.3-3.03 6.52-5.24 2.22-2.22 4-4.48 5.24-6.52 1.03-1.69 1.65-3.12 1.88-4.19.19-.97.03-1.27.02-1.29L29.9 10.73Z"
-                    fill="currentColor"
-                    fillRule="evenodd"
-                  />
-                </g>
-                <defs>
-                  <clipPath id="clip0">
-                    <rect width="48" height="48" fill="white" />
-                  </clipPath>
-                </defs>
-              </svg>
+              <img src="/OCockLogo.svg" alt="OClock logo" />
             </div>
             <div className="brand-copy">
-              <span className="brand-title">TimeWise</span>
-              <span className="brand-subtitle">Time zone intelligence</span>
+              <span className="brand-title">OClock</span>
+              <span className="brand-subtitle">Where every second aligns with your goals.</span>
             </div>
           </Link>
 
@@ -242,6 +237,10 @@ const Header = () => {
           </nav>
 
           <div className="header-actions">
+            <Link to="/support" className="support-button">
+              <SupportIcon className="support-button-icon" aria-hidden="true" />
+              <span>Support us</span>
+            </Link>
             <button
               type="button"
               className="theme-toggle"
@@ -286,8 +285,8 @@ const Header = () => {
         <div className="mobile-nav-content">
           <div className="mobile-nav-header">
             <div className="mobile-nav-brand">
-              <span className="mobile-nav-brand-title">TimeWise</span>
-              <span className="mobile-nav-brand-subtitle">Time zone intelligence</span>
+              <span className="mobile-nav-brand-title">OClock</span>
+              <span className="mobile-nav-brand-subtitle">Where every second aligns with your goals.</span>
             </div>
             <button
               type="button"
@@ -298,6 +297,15 @@ const Header = () => {
               <CloseIcon className="mobile-menu-icon" />
             </button>
           </div>
+
+          <Link
+            to="/support"
+            className="support-button support-button-mobile"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            <SupportIcon className="support-button-icon" aria-hidden="true" />
+            <span>Support us</span>
+          </Link>
 
           <nav className="mobile-nav-links" aria-label="Primary navigation">
             {renderNavItems(() => setIsMenuOpen(false))}

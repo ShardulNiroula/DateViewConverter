@@ -17,6 +17,7 @@ const CountrySelector = ({
   const [hasTyped, setHasTyped] = useState(false);
   const containerRef = useRef(null);
   const inputRef = useRef(null);
+  const selectedOptionRef = useRef(null);
 
   const containerClassName = ['country-selector', className].filter(Boolean).join(' ');
 
@@ -39,9 +40,18 @@ const CountrySelector = ({
           inputRef.current.focus();
           inputRef.current.select();
         }
+        if (selectedOptionRef.current) {
+          selectedOptionRef.current.scrollIntoView({ block: 'nearest' });
+        }
       });
     }
   }, [isOpen]);
+
+  useEffect(() => {
+    if (isOpen && selectedOptionRef.current) {
+      selectedOptionRef.current.scrollIntoView({ block: 'nearest' });
+    }
+  }, [isOpen, selectedOption]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -156,6 +166,7 @@ const CountrySelector = ({
                   className={`selector-option ${
                     option.value === selectedOption?.value ? 'selector-option--active' : ''
                   }`}
+                  ref={option.value === selectedOption?.value ? selectedOptionRef : null}
                   onMouseDown={(event) => event.preventDefault()}
                   onClick={() => handleOptionSelect(option)}
                   role="option"

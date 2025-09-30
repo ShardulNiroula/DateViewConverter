@@ -5,6 +5,7 @@ import Clock from './pages/clock/Clock';
 import Compare from './pages/compare/Compare';
 import Convert from './pages/convert/Convert';
 import ClockFullscreen from './pages/clock/ClockFullscreen';
+import SupportUs from './pages/supportUs/SupportUs';
 import './App.css';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
         <Route path="/clock" element={<Clock />} />
         <Route path="/compare" element={<Compare />} />
         <Route path="/convert" element={<Convert />} />
+  <Route path="/support" element={<SupportUs />} />
       </Route>
       <Route path="/clock/fullscreen" element={<ClockFullscreen />} />
     </Routes>

@@ -1,12 +1,20 @@
-# React + Vite
+# OClock
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+OClock is a React + Vite application for comparing, converting, and tracking timezones with a polished UI. It provides a suite of workspaces—world clock dashboards, comparison boards, and conversion tools—to keep distributed teams perfectly aligned.
 
-Currently, two official plugins are available:
+## ✨ Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Live world clock with analog and digital displays
+- Time comparison board for scheduling across locations
+- Time and date conversion workspace with dual-format input
+- Preset management for favorite timezone sets
+- Responsive layout with light and dark themes
 
-## Expanding the ESLint configuration
+## 🛠️ Development
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+npm install
+npm run dev
+```
+
+The app uses Vite for fast development feedback and React Router for navigation between workspaces. Linters can be run with `npm run lint`, and production builds are generated with `npm run build`.

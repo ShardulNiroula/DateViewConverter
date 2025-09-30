@@ -153,12 +153,37 @@
   text-align: center;
   color: var(--text-primary);
   background: rgba(255, 255, 255, 0.95);
+  color-scheme: light;
 }
 
 .convert-time-field input:focus {
   outline: none;
   border-color: rgba(17, 115, 212, 0.45);
   box-shadow: 0 0 0 3px rgba(17, 115, 212, 0.18);
+}
+
+.convert-time-field select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--border-radius-md);
+  border: 1px solid rgba(17, 115, 212, 0.18);
+  font-size: 1rem;
+  font-weight: var(--font-weight-semibold);
+  text-align: center;
+  color: var(--text-primary);
+  background: var(--bg-color);
+  cursor: pointer;
+  appearance: none;
+}
+
+.convert-time-field select:focus {
+  outline: none;
+  border-color: rgba(17, 115, 212, 0.45);
+  box-shadow: 0 0 0 3px rgba(17, 115, 212, 0.18);
+}
+
+.convert-meridiem-field {
+  min-width: 92px;
 }
 
 .convert-time-separator {
@@ -412,6 +437,10 @@
   background: rgba(16, 25, 34, 0.92);
   border-color: rgba(61, 167, 255, 0.28);
   color: var(--text-primary);
+}
+
+[data-theme="dark"] .convert-time-field input {
+  color-scheme: dark;
 }
 
 [data-theme="dark"] .convert-time-field input:focus,

@@ -7,7 +7,7 @@ const Footer = () => {
     <footer className="footer">
       <div className="footer-container">
         <p className="copyright">
-          © {currentYear} Date View Converter. All rights reserved.
+          © {currentYear} OClock. All rights reserved.
         </p>
       </div>
     </footer>
