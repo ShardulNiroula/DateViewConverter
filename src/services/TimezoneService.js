@@ -1,203 +1,245 @@
 import ct from 'countries-and-timezones';
 import moment from 'moment-timezone';
+import {
+  findTimezoneRecord,
+  formatOffsetLabel,
+  getTimezoneRecords
+} from '../utils/timezoneCatalog.js';
 
-// Get all countries and their timezones
-const getAllCountriesData = () => {
-  const countries = ct.getAllCountries();
-  const timezones = ct.getAllTimezones();
+const POPULAR_TIMEZONE_IDS = [
+  'America/New_York',
+  'America/Los_Angeles',
+  'America/Chicago',
+  'America/Toronto',
+  'America/Mexico_City',
+  'America/Sao_Paulo',
+  'America/Buenos_Aires',
+  'Europe/London',
+  'Europe/Paris',
+  'Europe/Berlin',
+  'Europe/Rome',
+  'Europe/Madrid',
+  'Europe/Amsterdam',
+  'Asia/Tokyo',
+  'Asia/Shanghai',
+  'Asia/Kolkata',
+  'Asia/Dubai',
+  'Asia/Singapore',
+  'Asia/Seoul',
+  'Asia/Hong_Kong',
+  'Australia/Sydney',
+  'Australia/Perth',
+  'Pacific/Auckland',
+  'Africa/Johannesburg',
+  'Africa/Cairo'
+];
 
-  const countryTimezoneMap = {};
+const getMomentForZone = (timezoneName) => {
+  if (!timezoneName || !moment.tz.zone(timezoneName)) {
+    return moment().tz('UTC');
+  }
 
-  // Map timezones to countries
-  Object.values(timezones).forEach(timezone => {
-    if (timezone.countries && timezone.countries.length > 0) {
-      timezone.countries.forEach(countryCode => {
-        if (!countryTimezoneMap[countryCode]) {
-          countryTimezoneMap[countryCode] = {
-            code: countryCode,
-            name: countries[countryCode]?.name || countryCode,
-            timezones: []
-          };
-        }
-        countryTimezoneMap[countryCode].timezones.push({
-          name: timezone.name,
-          offset: timezone.utcOffset,
-          abbreviation: timezone.abbreviation || timezone.name.split('/')[1] || timezone.name
+  try {
+    return moment().tz(timezoneName);
+  } catch (error) {
+    console.warn(`Unable to resolve timezone ${timezoneName}`, error);
+    return moment().tz('UTC');
+  }
+};
+
+const buildCountryTimezoneMap = () => {
+  const records = getTimezoneRecords();
+  const countriesMeta = ct.getAllCountries();
+
+  const countryMap = new Map();
+
+  records.forEach((record) => {
+    const countryCodes = record.countryCodes.length ? record.countryCodes : [null];
+
+    countryCodes.forEach((code) => {
+      const countryKey = code || record.region;
+      const countryName = code ? countriesMeta[code]?.name : record.country;
+
+      if (!countryMap.has(countryKey)) {
+        countryMap.set(countryKey, {
+          code: code || countryKey,
+          name: countryName || record.country || record.region,
+          timezones: []
         });
+      }
+
+      const zoneMoment = getMomentForZone(record.value);
+      const offsetMinutes = zoneMoment.utcOffset();
+
+      countryMap.get(countryKey).timezones.push({
+        name: record.value,
+        offsetMinutes,
+        abbreviation: zoneMoment.format('z') || record.value.split('/').pop(),
+        gmtLabel: formatOffsetLabel(offsetMinutes)
       });
-    }
+    });
   });
 
-  return Object.values(countryTimezoneMap);
+  return Array.from(countryMap.values()).map((country) => ({
+    ...country,
+    timezones: country.timezones.sort((a, b) => a.name.localeCompare(b.name))
+  })).sort((a, b) => a.name.localeCompare(b.name));
 };
 
-// Major cities for each timezone
-const MAJOR_CITIES = {
-  'America/New_York': ['New York', 'Washington DC', 'Boston'],
-  'America/Los_Angeles': ['Los Angeles', 'San Francisco', 'Seattle'],
-  'America/Chicago': ['Chicago', 'Dallas', 'Houston'],
-  'America/Denver': ['Denver', 'Phoenix'],
-  'America/Toronto': ['Toronto', 'Montreal', 'Vancouver'],
-  'America/Mexico_City': ['Mexico City', 'Guadalajara'],
-  'America/Sao_Paulo': ['São Paulo', 'Rio de Janeiro', 'Brasília'],
-  'America/Buenos_Aires': ['Buenos Aires', 'Córdoba'],
-  'Europe/London': ['London', 'Manchester', 'Birmingham'],
-  'Europe/Paris': ['Paris', 'Lyon', 'Marseille'],
-  'Europe/Berlin': ['Berlin', 'Munich', 'Frankfurt'],
-  'Europe/Rome': ['Rome', 'Milan', 'Venice'],
-  'Europe/Madrid': ['Madrid', 'Barcelona', 'Valencia'],
-  'Europe/Amsterdam': ['Amsterdam', 'Rotterdam'],
-  'Europe/Stockholm': ['Stockholm', 'Gothenburg'],
-  'Europe/Moscow': ['Moscow', 'Saint Petersburg', 'Kazan'],
-  'Asia/Tokyo': ['Tokyo', 'Osaka', 'Kyoto'],
-  'Asia/Shanghai': ['Shanghai', 'Beijing', 'Shenzhen'],
-  'Asia/Kolkata': ['Mumbai', 'Delhi', 'Bangalore'],
-  'Asia/Dubai': ['Dubai', 'Abu Dhabi', 'Sharjah'],
-  'Asia/Singapore': ['Singapore'],
-  'Asia/Seoul': ['Seoul', 'Busan'],
-  'Asia/Bangkok': ['Bangkok', 'Phuket'],
-  'Asia/Hong_Kong': ['Hong Kong'],
-  'Australia/Sydney': ['Sydney', 'Melbourne', 'Brisbane'],
-  'Australia/Perth': ['Perth', 'Adelaide'],
-  'Pacific/Auckland': ['Auckland', 'Wellington'],
-  'Africa/Cairo': ['Cairo', 'Alexandria'],
-  'Africa/Johannesburg': ['Johannesburg', 'Cape Town', 'Durban'],
-  'Africa/Lagos': ['Lagos', 'Abuja'],
-  'Africa/Nairobi': ['Nairobi', 'Mombasa']
-};
+const buildCountryIndex = () => buildCountryTimezoneMap();
 
 class TimezoneService {
   static getAllCountries() {
-    return getAllCountriesData();
+    return buildCountryIndex();
   }
 
   static getCountryByCode(code) {
-    const countries = this.getAllCountries();
-    return countries.find(country => country.code === code);
+    if (!code) {
+      return null;
+    }
+    return this.getAllCountries().find((country) => country.code === code) || null;
   }
 
   static getTimezoneByName(timezoneName) {
-    return ct.getTimezone(timezoneName);
+    if (!timezoneName) {
+      return null;
+    }
+
+    const record = findTimezoneRecord(timezoneName);
+    if (!record) {
+      return null;
+    }
+
+    const zoneMoment = getMomentForZone(timezoneName);
+    const offsetMinutes = zoneMoment.utcOffset();
+
+    return {
+      name: record.value,
+      abbreviation: zoneMoment.format('z'),
+      utcOffset: offsetMinutes,
+      offsetMinutes,
+      countries: record.countryCodes,
+      region: record.region,
+      city: record.city,
+      gmtLabel: formatOffsetLabel(offsetMinutes),
+      isDST: zoneMoment.isDST()
+    };
   }
 
   static getAllTimezones() {
-    return ct.getAllTimezones();
+    return getTimezoneRecords();
   }
 
   static searchCountries(query) {
-    const countries = this.getAllCountries();
-    const lowercaseQuery = query.toLowerCase();
+    const normalized = (query || '').toLowerCase();
+    if (!normalized) {
+      return this.getAllCountries();
+    }
 
-    return countries.filter(country =>
-      country.name.toLowerCase().includes(lowercaseQuery) ||
-      country.code.toLowerCase().includes(lowercaseQuery)
+    return this.getAllCountries().filter((country) =>
+      country.name.toLowerCase().includes(normalized) ||
+      (country.code || '').toLowerCase().includes(normalized)
     );
   }
 
   static searchTimezones(query) {
-    const timezones = Object.values(this.getAllTimezones());
-    const lowercaseQuery = query.toLowerCase();
+    const normalized = (query || '').toLowerCase();
+    const records = getTimezoneRecords();
 
-    return timezones.filter(timezone =>
-      timezone.name.toLowerCase().includes(lowercaseQuery) ||
-      timezone.abbreviation?.toLowerCase().includes(lowercaseQuery) ||
-      MAJOR_CITIES[timezone.name]?.some(city =>
-        city.toLowerCase().includes(lowercaseQuery)
-      )
-    );
+    if (!normalized) {
+      return records;
+    }
+
+    return records.filter((record) => record.searchValue.includes(normalized));
   }
 
-  static getTimezoneOffset(timezoneName) {
-    const timezone = this.getTimezoneByName(timezoneName);
-    return timezone ? timezone.utcOffset / 60 : 0; // Convert minutes to hours
+  static getTimezoneOffset(timezoneName, { inMinutes = false } = {}) {
+    const zoneMoment = getMomentForZone(timezoneName);
+    const offsetMinutes = zoneMoment.utcOffset();
+    return inMinutes ? offsetMinutes : offsetMinutes / 60;
   }
 
   static getCurrentTimeInTimezone(timezoneName) {
-    return moment().tz(timezoneName);
+    return getMomentForZone(timezoneName);
   }
 
-  static formatTimezoneOffset(offsetHours) {
-    const sign = offsetHours >= 0 ? '+' : '-';
-    const hours = Math.abs(Math.floor(offsetHours));
-    const minutes = Math.abs((offsetHours % 1) * 60);
-    return `UTC${sign}${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+  static formatTimezoneOffset(offsetValue, { inputIsMinutes = false } = {}) {
+    const offsetMinutes = inputIsMinutes ? offsetValue : offsetValue * 60;
+    return formatOffsetLabel(offsetMinutes);
   }
 
   static getCountryOptions() {
-    const countries = this.getAllCountries();
-    const options = [];
+    const records = getTimezoneRecords();
 
-    countries.forEach(country => {
-      country.timezones.forEach(timezone => {
-        const cities = MAJOR_CITIES[timezone.name] || [timezone.abbreviation];
-        cities.forEach(city => {
-          options.push({
-            value: timezone.name,
-            label: `${country.name} - ${city} (${this.formatTimezoneOffset(timezone.offset / 60)})`,
-            country: country.name,
-            city: city,
-            timezone: timezone.name,
-            offset: timezone.offset
-          });
-        });
-      });
-    });
+    return records
+      .map((record) => {
+        const zoneMoment = getMomentForZone(record.value);
+        const offsetMinutes = zoneMoment.utcOffset();
 
-    // Sort by country name
-    return options.sort((a, b) => a.country.localeCompare(b.country));
+        const countryLabel = record.country || record.region;
+        const cityLabel = record.city || record.region;
+
+        return {
+          value: record.value,
+          label: `${countryLabel} - ${cityLabel} (${formatOffsetLabel(offsetMinutes)})`,
+          country: countryLabel,
+          city: cityLabel,
+          timezone: record.value,
+          offset: offsetMinutes,
+          offsetMinutes,
+          gmtLabel: formatOffsetLabel(offsetMinutes),
+          isDST: zoneMoment.isDST()
+        };
+      })
+      .sort((a, b) => a.country.localeCompare(b.country) || a.city.localeCompare(b.city));
   }
 
   static getPopularTimezones() {
-    const popular = [
-      'America/New_York',
-      'America/Los_Angeles',
-      'America/Chicago',
-      'America/Toronto',
-      'Europe/London',
-      'Europe/Paris',
-      'Europe/Berlin',
-      'Europe/Rome',
-      'Europe/Madrid',
-      'Asia/Tokyo',
-      'Asia/Shanghai',
-      'Asia/Kolkata',
-      'Asia/Dubai',
-      'Asia/Singapore',
-      'Australia/Sydney',
-      'Pacific/Auckland',
-      'Africa/Johannesburg',
-      'America/Sao_Paulo'
-    ];
+    const records = getTimezoneRecords();
+    const recordMap = new Map(records.map((record) => [record.value, record]));
 
-    return popular.map(timezone => {
-      const tz = this.getTimezoneByName(timezone);
-      const countries = this.getAllCountries();
-      const country = countries.find(c =>
-        c.timezones.some(t => t.name === timezone)
-      );
+    return POPULAR_TIMEZONE_IDS
+      .map((timezoneId) => {
+        const record = recordMap.get(timezoneId);
+        if (!record) {
+          return null;
+        }
 
-      const cities = MAJOR_CITIES[timezone] || [tz?.abbreviation || timezone.split('/')[1]];
+        const zoneMoment = getMomentForZone(record.value);
+        const offsetMinutes = zoneMoment.utcOffset();
+        const countryLabel = record.country || record.region;
+        const cityLabel = record.city || record.region;
 
-      return {
-        value: timezone,
-        label: `${country?.name || 'Unknown'} - ${cities[0]} (${this.formatTimezoneOffset(tz?.utcOffset / 60 || 0)})`,
-        country: country?.name || 'Unknown',
-        city: cities[0],
-        timezone: timezone,
-        offset: tz?.utcOffset || 0
-      };
-    });
+        return {
+          value: record.value,
+          label: `${countryLabel} - ${cityLabel} (${formatOffsetLabel(offsetMinutes)})`,
+          country: countryLabel,
+          city: cityLabel,
+          timezone: record.value,
+          offset: offsetMinutes,
+          offsetMinutes,
+          gmtLabel: formatOffsetLabel(offsetMinutes),
+          isDST: zoneMoment.isDST()
+        };
+      })
+      .filter(Boolean);
   }
 
   static getTimezonesByCountry(countryCode) {
-    const country = this.getCountryByCode(countryCode);
-    return country ? country.timezones : [];
+    if (!countryCode) {
+      return [];
+    }
+
+    return getTimezoneRecords().filter((record) =>
+      record.countryCodes.includes(countryCode)
+    );
   }
 
-  static getTimeDifference(timezone1, timezone2) {
-    const offset1 = this.getTimezoneOffset(timezone1);
-    const offset2 = this.getTimezoneOffset(timezone2);
-    return offset2 - offset1;
+  static getTimeDifference(timezone1, timezone2, { inMinutes = false } = {}) {
+    const offset1 = this.getTimezoneOffset(timezone1, { inMinutes: true });
+    const offset2 = this.getTimezoneOffset(timezone2, { inMinutes: true });
+    const diffMinutes = offset2 - offset1;
+    return inMinutes ? diffMinutes : diffMinutes / 60;
   }
 }
 

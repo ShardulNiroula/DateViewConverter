@@ -19,11 +19,15 @@ const useTimezone = () => {
     try {
       const tz = TimezoneService.getTimezoneByName(timezoneName);
       if (tz) {
+        const offsetHours = (tz.utcOffset ?? 0) / 60;
         return {
           name: tz.name,
           abbreviation: tz.abbreviation,
-          offset: tz.utcOffset / 60, // Convert minutes to hours
-          countries: tz.countries || []
+          offset: offsetHours,
+          offsetMinutes: tz.utcOffset ?? 0,
+          countries: tz.countries || [],
+          gmtLabel: tz.gmtLabel,
+          isDST: tz.isDST
         };
       }
     } catch (error) {
@@ -35,7 +39,10 @@ const useTimezone = () => {
       name: timezoneName,
       abbreviation: timezoneName.split('/')[1] || timezoneName,
       offset: 0,
-      countries: []
+      offsetMinutes: 0,
+      countries: [],
+  gmtLabel: TimezoneService.formatTimezoneOffset(0, { inputIsMinutes: true }),
+      isDST: false
     };
   };
 
@@ -52,8 +59,9 @@ const useTimezone = () => {
     return TimezoneService.getTimeDifference(timezone1, timezone2);
   };
 
-  const formatTimezoneOffset = (offsetHours) => {
-    return TimezoneService.formatTimezoneOffset(offsetHours);
+  const formatTimezoneOffset = (offset) => {
+    const offsetMinutes = typeof offset === 'number' ? offset * 60 : 0;
+    return TimezoneService.formatTimezoneOffset(offsetMinutes, { inputIsMinutes: true });
   };
 
   const isValidTimezone = (timezoneName) => {
