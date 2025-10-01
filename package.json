@@ -13,6 +13,8 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@capacitor/android": "^7.4.3",
+    "@capacitor/core": "^7.4.3",
     "countries-and-timezones": "^3.8.0",
     "moment-timezone": "^0.6.0",
     "react": "^19.1.1",

@@ -108,7 +108,7 @@ const SupportUs = () => {
 				<div className="support-hero-layout">
 					<div className="support-hero-copy">
 						<span className="support-hero-eyebrow">Keep OClock thriving</span>
-						<h1>Support a free, ad-free timezone toolkit</h1>
+						<h1>Support A Free, Ad-free Timezone Toolkit</h1>
 						<p>
 							OClock helps you view, compare, and convert time across the world. Community support keeps it fast, accurate, and
 							available to everyone without paywalls or distractions.
