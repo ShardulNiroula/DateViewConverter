@@ -9,16 +9,6 @@
   animation: fadeInUp 0.6s ease-out;
 }
 
-.floating-controls {
-  position: fixed;
-  bottom: clamp(16px, 3vw, 24px);
-  right: clamp(16px, 3vw, 24px);
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-
 .clock-page::before,
 .clock-page::after {
   content: '';

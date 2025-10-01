@@ -4,6 +4,7 @@ import DigitalClock from './DigitalClock';
 import AnalogClock from './AnalogClock';
 import ClockTypeSwitcher from './ClockTypeSwitcher';
 import CountrySelector from './CountrySelector';
+import FormatSwitcher from '../../../components/common/FormatSwitcher';
 import './ClockDisplay.css';
 import { createClockSearchParams, toClockSearchString } from '../../../utils/clockParams';
 
@@ -17,6 +18,7 @@ const ClockDisplay = ({
   timezoneDetails,
   onClockTypeChange,
   onTimezoneChange,
+  onFormatChange,
   showDate = true,
   showSeconds = true,
   enableFullscreen = false
@@ -133,6 +135,12 @@ const ClockDisplay = ({
         {displayRegion && (
           <div className="headline-meta">
             <span className="meta-chip">{displayRegion}</span>
+            {onFormatChange && clockType === 'digital' && (
+              <FormatSwitcher
+                format={format}
+                onFormatChange={onFormatChange}
+              />
+            )}
           </div>
         )}
       </header>
@@ -148,6 +156,13 @@ const ClockDisplay = ({
             <span aria-hidden="true">⤢</span>
           </button>
         )}
+        {clockType === 'digital' && (
+          <div className="clock-visual-format">
+            <span className="format-indicator">
+              {format === '12' ? '12H' : '24H'}
+            </span>
+          </div>
+        )}
         <div className="clock-visual-surface">
           {clockType === 'digital' ? (
             <DigitalClock
@@ -155,6 +170,7 @@ const ClockDisplay = ({
               format={format}
               showDate={showDate}
               showSeconds={showSeconds}
+              hideFormat={true}
             />
           ) : (
             <AnalogClock time={time} size={360} />

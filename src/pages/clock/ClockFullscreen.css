@@ -35,7 +35,12 @@
   font-size: 0.95rem;
   cursor: pointer;
   box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast), opacity var(--transition-fast);
+}
+
+.clock-fullscreen-back.is-hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .clock-fullscreen-back:hover {

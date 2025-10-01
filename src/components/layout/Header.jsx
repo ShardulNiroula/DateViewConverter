@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 const ICON_PROPS = {
   fill: 'none',
@@ -108,46 +108,12 @@ const NAV_LINKS = [
 
 const Header = () => {
   const [theme, setTheme] = useState('dark');
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const location = useLocation();
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') || 'dark';
     setTheme(savedTheme);
     document.documentElement.setAttribute('data-theme', savedTheme);
   }, []);
-
-  useEffect(() => {
-    setIsMenuOpen(false);
-  }, [location.pathname]);
-
-  useEffect(() => {
-    if (isMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.removeProperty('overflow');
-    }
-
-    return () => {
-      document.body.style.removeProperty('overflow');
-    };
-  }, [isMenuOpen]);
-
-  useEffect(() => {
-    if (!isMenuOpen) {
-      return undefined;
-    }
-
-    const handleKeyDown = (event) => {
-      if (event.key === 'Escape') {
-        setIsMenuOpen(false);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isMenuOpen]);
 
   const toggleTheme = () => {
     const nextTheme = theme === 'light' ? 'dark' : 'light';
@@ -156,7 +122,7 @@ const Header = () => {
     localStorage.setItem('theme', nextTheme);
   };
 
-  const renderNavItems = (onNavigate) => (
+  const renderNavItems = ({ onNavigate, bottom } = {}) => (
     <ul className="nav-list">
       {NAV_LINKS.map((link) => {
         const { to, label } = link;
@@ -171,7 +137,7 @@ const Header = () => {
               className={({ isActive }) =>
                 [
                   'nav-link',
-                  onNavigate && 'nav-link-mobile',
+                  bottom && 'nav-link-bottom',
                   isActive && 'nav-link-active',
                 ]
                   .filter(Boolean)
@@ -249,74 +215,15 @@ const Header = () => {
             >
               {renderThemeIcon()}
             </button>
-            <button
-              type="button"
-              className="mobile-menu-toggle"
-              onClick={() => setIsMenuOpen((prev) => !prev)}
-              aria-label={`${isMenuOpen ? 'Close' : 'Open'} navigation`}
-              aria-expanded={isMenuOpen}
-              aria-controls="mobile-nav"
-            >
-              {isMenuOpen ? (
-                <CloseIcon className="mobile-menu-icon" />
-              ) : (
-                <MenuIcon className="mobile-menu-icon" />
-              )}
-            </button>
+            {/* removed hamburger menu; bottom navigation used on small screens */}
           </div>
         </div>
       </header>
 
-      <div
-        className={`mobile-nav${isMenuOpen ? ' mobile-nav-open' : ''}`}
-        id="mobile-nav"
-        role="dialog"
-        aria-modal="true"
-        aria-label="Primary navigation"
-        aria-hidden={!isMenuOpen}
-      >
-        <button
-          type="button"
-          className="mobile-nav-backdrop"
-          onClick={() => setIsMenuOpen(false)}
-          aria-hidden="true"
-          tabIndex={-1}
-        />
-        <div className="mobile-nav-content">
-          <div className="mobile-nav-header">
-            <div className="mobile-nav-brand">
-              <span className="mobile-nav-brand-title">OClock</span>
-              <span className="mobile-nav-brand-subtitle">Where every second aligns with your goals.</span>
-            </div>
-            <button
-              type="button"
-              className="mobile-nav-close"
-              onClick={() => setIsMenuOpen(false)}
-              aria-label="Close navigation"
-            >
-              <CloseIcon className="mobile-menu-icon" />
-            </button>
-          </div>
-
-          <nav className="mobile-nav-links" aria-label="Primary navigation">
-            {renderNavItems(() => setIsMenuOpen(false))}
-          </nav>
-
-          <div className="mobile-nav-footer">
-            <button
-              type="button"
-              className="mobile-nav-theme-toggle"
-              onClick={toggleTheme}
-              aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-            >
-              {renderThemeIcon()}
-              <span className="mobile-nav-theme-text">
-                Switch to {theme === 'light' ? 'dark' : 'light'} mode
-              </span>
-            </button>
-          </div>
-        </div>
-      </div>
+      {/* bottom navigation for tablet / mobile */}
+      <nav className="nav nav-bottom" aria-label="Primary navigation">
+        {renderNavItems({ bottom: true })}
+      </nav>
     </>
   );
 };

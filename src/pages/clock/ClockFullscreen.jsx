@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useClock from '../../hooks/useClock';
 import DigitalClock from './components/DigitalClock';
@@ -9,6 +9,9 @@ import './ClockFullscreen.css';
 const ClockFullscreen = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [isButtonVisible, setIsButtonVisible] = useState(true);
+  const hideTimeoutRef = useRef(null);
+
   const params = new URLSearchParams(location.search);
   const routeState = location.state ?? {};
 
@@ -25,6 +28,39 @@ const ClockFullscreen = () => {
   const showSeconds = showSecondsParam === 'false' ? false : routeState.showSeconds === false ? false : true;
 
   const { time } = useClock(0, timezone);
+
+  const resetHideTimer = () => {
+    setIsButtonVisible(true);
+    if (hideTimeoutRef.current) {
+      clearTimeout(hideTimeoutRef.current);
+    }
+    hideTimeoutRef.current = setTimeout(() => {
+      setIsButtonVisible(false);
+    }, 5000);
+  };
+
+  useEffect(() => {
+    resetHideTimer();
+
+    const handleActivity = () => {
+      resetHideTimer();
+    };
+
+    document.addEventListener('mousemove', handleActivity);
+    document.addEventListener('click', handleActivity);
+    document.addEventListener('keydown', handleActivity);
+    document.addEventListener('touchstart', handleActivity);
+
+    return () => {
+      if (hideTimeoutRef.current) {
+        clearTimeout(hideTimeoutRef.current);
+      }
+      document.removeEventListener('mousemove', handleActivity);
+      document.removeEventListener('click', handleActivity);
+      document.removeEventListener('keydown', handleActivity);
+      document.removeEventListener('touchstart', handleActivity);
+    };
+  }, []);
 
   const handleExit = () => {
     const params = createClockSearchParams({
@@ -53,7 +89,7 @@ const ClockFullscreen = () => {
     <div className="clock-fullscreen" data-visual={clockType}>
       <button
         type="button"
-        className="clock-fullscreen-back"
+        className={`clock-fullscreen-back ${!isButtonVisible ? 'is-hidden' : ''}`}
         onClick={handleExit}
       >
         <span aria-hidden="true">←</span>

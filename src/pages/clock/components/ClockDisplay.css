@@ -182,8 +182,18 @@
 
 .headline-meta {
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(12px, 2vw, 16px);
   flex: 0 0 auto;
+}
+
+@media (max-width: 768px) {
+  .headline-meta {
+    flex-direction: row;
+    align-items: center;
+    gap: clamp(12px, 3vw, 16px);
+  }
 }
 
 .meta-chip {
@@ -202,7 +212,7 @@
   border-radius: calc(var(--border-radius-lg) - 4px);
   background: linear-gradient(135deg, rgba(17, 115, 212, 0.08) 0%, rgba(30, 136, 229, 0.16) 45%, rgba(255, 255, 255, 0.05) 100%);
   border: 1px solid rgba(17, 115, 212, 0.15);
-  padding: clamp(80px, 3vw, 30px) clamp(15px, 3vw, 15px);
+  padding: clamp(80px, 3vw, 30px) clamp(15px, 3vw, 15px) 0 clamp(15px, 3vw, 15px);
   display: flex;
   flex-direction: column;
   gap: clamp(20px, 3vw, 32px);
@@ -255,6 +265,13 @@
   align-items: center;
 }
 
+.clock-visual-format {
+  position: absolute;
+  top: clamp(16px, 3vw, 24px);
+  left: clamp(16px, 3vw, 24px);
+  z-index: 100;
+}
+
 .clock-visual-footer {
   display: flex;
   justify-content: space-between;
@@ -282,6 +299,20 @@
 .visual-footer-value {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.9rem;
+}
+
+.format-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  border-radius: var(--border-radius-sm);
+  background: rgba(17, 115, 212, 0.1);
+  color: var(--primary-color);
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .clock-info-grid {
@@ -349,13 +380,13 @@
   .clock-visual-footer {
     flex-direction: column;
     align-items: flex-start;
-    gap: 6px;
+    gap: 12px;
   }
 }
 
 @media (max-width: 600px) {
   .clock-display {
-    padding: clamp(18px, 6vw, 28px);
+    padding: clamp(8px, 4vw, 12px);
   }
 
   .headline-title {

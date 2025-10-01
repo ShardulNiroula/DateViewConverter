@@ -2,38 +2,43 @@
   display: flex;
   flex-direction: column;
   gap: clamp(32px, 4vw, 48px);
-  padding: clamp(24px, 6vw, 60px) clamp(20px, 8vw, 80px) clamp(40px, 10vw, 96px);
+  padding: 30px 10px ;
   background: linear-gradient(135deg, rgba(17, 115, 212, 0.06) 0%, rgba(255, 255, 255, 0.96) 45%, rgba(246, 247, 248, 1) 100%);
   min-height: calc(100vh - 160px);
 }
 
 .convert-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 24px;
 }
 
 .convert-headline {
-  max-width: 540px;
+  width: 100%;
 }
 
 .convert-title {
   margin: 0 0 12px 0;
+    width: 100%;
   font-size: clamp(2rem, 3vw, 2.75rem);
   font-weight: var(--font-weight-bold);
   color: var(--text-primary);
+  text-align: center;
 }
 
 .convert-subtitle {
   margin: 0;
   color: var(--text-secondary);
   line-height: 1.6;
+  width: 100%;
+  text-align: center;
 }
 
 .convert-header-actions {
   display: flex;
-  align-items: flex-start;
+  justify-content: center;
+  align-items: center;
   gap: 16px;
 }
 
@@ -278,6 +283,11 @@
   .convert-card {
     width: 100%;
   }
+
+  .convert-title {
+    text-align: center;
+  
+}
 }
 
 .convert-result-card {
@@ -373,12 +383,10 @@
 }
 
 @media (max-width: 720px) {
-  .convert-page {
-    padding: clamp(18px, 6vw, 32px);
-  }
 
   .convert-header {
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: center;
   }
 
   .convert-actions {
@@ -399,6 +407,10 @@
   .convert-result-meta {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .convert-title {
+    font-size: clamp(1.5rem, 6vw, 2.25rem);
   }
 }
 

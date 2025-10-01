@@ -1,9 +1,9 @@
 .format-switcher {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 8px;
   width: 100%;
-  max-width: 320px;
+  max-width: 200px;
 }
 
 .format-toggle {

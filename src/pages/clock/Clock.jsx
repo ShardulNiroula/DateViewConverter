@@ -1,6 +1,5 @@
 import React from 'react';
 import ClockDisplay from './components/ClockDisplay';
-import FormatSwitcher from '../../components/common/FormatSwitcher';
 import useClockPageState from '../../hooks/useClockPageState';
 import './Clock.css';
 
@@ -20,13 +19,6 @@ const Clock = () => {
 
   return (
     <div className="clock-page">
-      <div className="floating-controls">
-        <FormatSwitcher
-          format={format}
-          onFormatChange={handleFormatChange}
-        />
-      </div>
-
       <section className="clock-content">
         <div className="clock-main">
           <ClockDisplay
@@ -41,6 +33,7 @@ const Clock = () => {
             timezoneDetails={presetDetails}
             onClockTypeChange={handleClockTypeChange}
             onTimezoneChange={handleTimezoneChange}
+            onFormatChange={handleFormatChange}
             enableFullscreen
           />
         </div>

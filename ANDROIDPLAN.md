@@ -31,8 +31,8 @@ Convert the existing React/Vite web app (DateViewConverter/OClock) into an Andro
 - [x] Open in Android Studio: `npx cap open android`
 
 ## Development and Testing
-- [ ] Configure Android Studio project settings
-- [ ] Set up emulator or connect physical device
+- [x] Configure Android Studio project settings
+- [x] Set up emulator or connect physical device
 - [ ] Build APK: Use Android Studio build menu
 - [ ] Test app functionality on Android device/emulator
 - [ ] Debug any Capacitor-specific issues (e.g., plugins if needed)
