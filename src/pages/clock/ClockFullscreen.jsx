@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { App } from '@capacitor/app';
 import useClock from '../../hooks/useClock';
 import DigitalClock from './components/DigitalClock';
 import AnalogClock from './components/AnalogClock';
@@ -39,29 +40,6 @@ const ClockFullscreen = () => {
     }, 5000);
   };
 
-  useEffect(() => {
-    resetHideTimer();
-
-    const handleActivity = () => {
-      resetHideTimer();
-    };
-
-    document.addEventListener('mousemove', handleActivity);
-    document.addEventListener('click', handleActivity);
-    document.addEventListener('keydown', handleActivity);
-    document.addEventListener('touchstart', handleActivity);
-
-    return () => {
-      if (hideTimeoutRef.current) {
-        clearTimeout(hideTimeoutRef.current);
-      }
-      document.removeEventListener('mousemove', handleActivity);
-      document.removeEventListener('click', handleActivity);
-      document.removeEventListener('keydown', handleActivity);
-      document.removeEventListener('touchstart', handleActivity);
-    };
-  }, []);
-
   const handleExit = () => {
     const params = createClockSearchParams({
       timezone,
@@ -80,6 +58,45 @@ const ClockFullscreen = () => {
       }
     );
   };
+
+  useEffect(() => {
+    resetHideTimer();
+
+    const handleActivity = () => {
+      resetHideTimer();
+    };
+
+    // Handle hardware back button for fullscreen - use the same logic as UI back button
+    const handleBackButton = (event) => {
+      // Prevent default behavior and stop propagation
+      if (event) {
+        event.preventDefault?.();
+      }
+      handleExit();
+      return false; // Return false to prevent other handlers from executing
+    };
+
+    document.addEventListener('mousemove', handleActivity);
+    document.addEventListener('click', handleActivity);
+    document.addEventListener('keydown', handleActivity);
+    document.addEventListener('touchstart', handleActivity);
+
+    // Add Capacitor back button listener with priority
+    const backButtonListener = App.addListener('backButton', handleBackButton);
+
+    return () => {
+      if (hideTimeoutRef.current) {
+        clearTimeout(hideTimeoutRef.current);
+      }
+      document.removeEventListener('mousemove', handleActivity);
+      document.removeEventListener('click', handleActivity);
+      document.removeEventListener('keydown', handleActivity);
+      document.removeEventListener('touchstart', handleActivity);
+      
+      // Remove back button listener
+      backButtonListener.then(handle => handle.remove()).catch(() => {});
+    };
+  }, []);
 
   const analogSize = typeof window !== 'undefined'
     ? Math.min(window.innerWidth, window.innerHeight) * 0.7

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 
 const ICON_PROPS = {
   fill: 'none',
@@ -108,6 +108,7 @@ const NAV_LINKS = [
 
 const Header = () => {
   const [theme, setTheme] = useState('dark');
+  const location = useLocation();
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') || 'dark';
@@ -134,6 +135,7 @@ const Header = () => {
             <NavLink
               to={to}
               {...linkProps}
+              key={`${to}-${location.pathname}`}
               className={({ isActive }) =>
                 [
                   'nav-link',
