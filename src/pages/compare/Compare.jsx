@@ -28,7 +28,7 @@ const Compare = () => {
     <div className="compare-page">
       <header className="compare-header">
         <div className="compare-headline">
-          <h1 className="compare-title">Time Zone Compare</h1>
+          <h1 className="compare-title">Compare Time Zones Instantly</h1>
           <p className="compare-subtitle">
             Select two locations to see their current times side by side and understand the exact difference.
           </p>

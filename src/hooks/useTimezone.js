@@ -1,19 +1,16 @@
 import { useState, useEffect } from 'react';
 import moment from 'moment-timezone';
+import ct from 'countries-and-timezones';
 import TimezoneService from '../services/TimezoneService';
 
 const useTimezone = () => {
-  const [currentTimezone, setCurrentTimezone] = useState('UTC');
-  const [timezoneOffset, setTimezoneOffset] = useState(0);
+  const guessedTimezone = moment.tz.guess();
+  const tzMetadata = ct.getTimezone(guessedTimezone);
+  const localTimezone = tzMetadata?.aliasOf || guessedTimezone;
+  const localOffset = moment().tz(localTimezone).utcOffset() / 60; // Convert to hours
 
-  useEffect(() => {
-    // Get user's local timezone using moment-timezone
-    const localTimezone = moment.tz.guess();
-    const localOffset = moment().tz(localTimezone).utcOffset() / 60; // Convert to hours
-
-    setCurrentTimezone(localTimezone);
-    setTimezoneOffset(localOffset);
-  }, []);
+  const [currentTimezone, setCurrentTimezone] = useState(localTimezone);
+  const [timezoneOffset, setTimezoneOffset] = useState(localOffset);
 
   const getTimezoneInfo = (timezoneName) => {
     try {

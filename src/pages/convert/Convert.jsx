@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import './Convert.css';
 import FormatSwitcher from '../../components/common/FormatSwitcher';
 import { Button } from '../../components/ui';
@@ -19,6 +19,8 @@ const TIME_PARTS_BY_FORMAT = {
 };
 
 const Convert = () => {
+  const resultRef = useRef(null);
+
   const {
     format,
     handleFormatChange,
@@ -46,6 +48,12 @@ const Convert = () => {
   const targetMoment = result?.target.moment;
   const difference = result?.difference;
 
+  useEffect(() => {
+    if (result && resultRef.current) {
+      resultRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [result]);
+
   const sourceFormattedTime = hasResult ? sourceMoment.format(timeFormat) : null;
   const sourceFormattedDate = hasResult ? sourceMoment.format(dateFormat) : null;
   const targetFormattedTime = hasResult ? targetMoment.format(timeFormat) : null;
@@ -66,7 +74,7 @@ const Convert = () => {
     <div className="convert-page">
       <header className="convert-header">
         <div className="convert-headline">
-          <h1 className="convert-title">Time Zone Converter</h1>
+          <h1 className="convert-title">Convert Time Zones Seamlessly</h1>
           <p className="convert-subtitle">
             Capture a moment in one location and instantly translate it to any destination timezone.
           </p>
@@ -209,7 +217,7 @@ const Convert = () => {
       )}
 
       {hasResult && (
-        <section className="convert-results">
+        <section className="convert-results" ref={resultRef}>
           <div className="convert-results-grid">
             <article className="convert-result-card">
               <header>

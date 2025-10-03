@@ -1,12 +1,8 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import useClock from '../../hooks/useClock';
-import useTimeFormat from '../../hooks/useTimeFormat';
-import useTimezone from '../../hooks/useTimezone';
 import usePresetTimezones from '../../hooks/usePresetTimezones';
 import './Home.css';
-import { ClockIcon, CompareIcon, ConvertIcon } from '../../components/ui/Icons';
-import Dropdown from '../../components/ui/Dropdown';
+import { ClockIcon, CompareIcon, ConvertIcon, GlobeIcon, SmallClockIcon, CheckIcon } from '../../components/ui/Icons';
 
 const featureHighlights = [
   {
@@ -53,42 +49,9 @@ const featureHighlights = [
   },
 ];
 
-const workflowSteps = [
-  {
-    title: 'Check a clock',
-    body: 'Open the world clock and switch formats or styles depending on how you like to read time.',
-  },
-  {
-    title: 'Compare two zones',
-    body: 'Use the comparison page to quickly understand how far apart two places are right now.',
-  },
-  {
-    title: 'Convert into specific timezones',
-    body: 'Need to schedule or plan? Enter a time and translate it instantly to another timezone.',
-  },
-  {
-    title: 'Adjust & repeat',
-    body: 'Swap timezones, change formats, or jump fullscreen—everything updates live while you explore.',
-  },
-];
-
-const quickActions = [
-  { label: 'Open world clock', to: '/clock' },
-  { label: 'Compare timezones', to: '/compare' },
-  { label: 'Convert into specific timezone', to: '/convert' },
-];
-
-const formatOptions = [
-  { value: '12', label: '12-hour (AM / PM)' },
-  { value: '24', label: '24-hour (00 – 23)' },
-];
-
 const Home = () => {
-  const [selectedTimezone] = useState('UTC');
-  const { format, setFormat } = useTimeFormat();
-  const { getTimezoneInfo, formatTimezoneOffset } = useTimezone();
   const { timezones } = usePresetTimezones();
-  const { time: currentTime } = useClock(0, selectedTimezone);
+  
 
   const supportedZoneCount = timezones.length;
 
@@ -106,153 +69,154 @@ const Home = () => {
     [formattedSupportedZones]
   );
 
-  const timezoneInfo = useMemo(
-    () => getTimezoneInfo(selectedTimezone),
-    [getTimezoneInfo, selectedTimezone]
-  );
-
-  const offsetLabel = useMemo(() => {
-    if (!timezoneInfo) {
-      return 'UTC+00:00';
-    }
-    return formatTimezoneOffset(timezoneInfo.offset ?? 0);
-  }, [formatTimezoneOffset, timezoneInfo]);
-
-  const timezoneParts = selectedTimezone.split('/');
-  const timezoneRegion = timezoneParts[0]?.replace(/_/g, ' ') || 'Global';
-  const timezoneCity = timezoneParts.slice(1).join(' / ').replace(/_/g, ' ');
-  const timezoneTitle = timezoneCity || timezoneRegion;
-  const timezoneSubtitle = timezoneCity ? timezoneRegion : 'Timezone';
-  const referenceTimeText = format === '12' ? '12:00:00 AM' : '00:00:00';
-
   return (
-    <div className="home-root">
-      <section className="hero">
-        <div className="hero-copy">
-          <span className="eyebrow">Simple tools</span>
-          <h1 className="headline">Understand Time Across The World</h1>
-          <p className="lede">
-            OClock lets you view, compare, and convert timezones without guesswork. Clean, fast, and focused, built for
-            anyone who works, studies, plays, or connects across regions.
-          </p>
-
-          <div className="hero-actions">
-            <Link to="/clock" className="cta primary">Open clock</Link>
-            <Link to="/compare" className="cta ghost">Compare zones</Link>
-          </div>
-
-          <dl className="hero-stats">
-            {heroStats.map((item) => (
-              <div key={item.label} className="stat">
-                <dt>{item.label}</dt>
-                <dd>{item.value}</dd>
-              </div>
-            ))}
-          </dl>
+    <div className="home-container">
+      <section className="hero-section">
+        <div className="hero-background">
+          <div className="hero-overlay"></div>
         </div>
-
-        <aside className="hero-panel" aria-label="Live time snapshot">
-          <header className="panel-header">
-            <div className="panel-region">
-              <span className="panel-region-label">Reference timezone</span>
-              <h2 className="panel-region-title">{timezoneTitle}</h2>
-              <span className="panel-region-subtitle">{timezoneSubtitle}</span>
-            </div>
-            <span className="panel-offset">{offsetLabel}</span>
-          </header>
-
-          <div className="panel-time">
-            <span className="panel-time-label">Reference time</span>
-            <time className="panel-time-value" dateTime="00:00:00">{referenceTimeText}</time>
-            <span className="panel-time-meta">{currentTime.format('dddd, MMM D')}</span>
+        <span className="eyebrow" ref={eyebrowRef => {
+          // attach ref via callback so we can set top on mount from CSS/JS
+          if (eyebrowRef) {
+            // store on the element for later access via effect
+            eyebrowRef.dataset.attached = 'true';
+          }
+        }}>Simple tool</span>
+        <div className="hero-content">
+          <div className="hero-text">
+            <h1 className="headline">Master Global Time Zones Effortlessly</h1>
+            <p className="lede">
+              OClock lets you view, compare, and convert timezones without guesswork. Clean, fast, and focused, built for
+              anyone who works, studies, plays, or connects across regions.
+            </p>
           </div>
-
-          <div className="panel-format">
-            <div className="panel-format-copy">
-              <span className="panel-format-label">Display format</span>
-              <span className="panel-format-value">{format === '12' ? '12-hour preference' : '24-hour preference'}</span>
-            </div>
-            <Dropdown
-              className="panel-format-dropdown"
-              options={formatOptions}
-              value={format}
-              onChange={(option) => setFormat(option.value)}
-              placeholder="Choose format"
-            />
-          </div>
-
-          <div className="panel-quick-actions" aria-label="Jump to tools">
-            {quickActions.map((action) => (
-              <Link key={action.to} to={action.to} className="quick-action">
-                <span>{action.label}</span>
-                <span aria-hidden="true">→</span>
+          <div className="hero-actions">
+            <div className="action-cards">
+              <Link to="/clock" className="action-card primary">
+                <div className="action-icon">
+                  <ClockIcon className="action-icon-svg" />
+                </div>
+                <div className="action-content">
+                  <h3>World Clock</h3>
+                  <p>View current time anywhere</p>
+                </div>
+                <div className="action-arrow">→</div>
               </Link>
-            ))}
+              
+              <Link to="/compare" className="action-card secondary">
+                <div className="action-icon">
+                  <CompareIcon className="action-icon-svg" />
+                </div>
+                <div className="action-content">
+                  <h3>Compare Zones</h3>
+                  <p>Side-by-side time comparison</p>
+                </div>
+                <div className="action-arrow">→</div>
+              </Link>
+              
+              <Link to="/convert" className="action-card tertiary">
+                <div className="action-icon">
+                  <ConvertIcon className="action-icon-svg" />
+                </div>
+                <div className="action-content">
+                  <h3>Convert Time</h3>
+                  <p>Transform between timezones</p>
+                </div>
+                <div className="action-arrow">→</div>
+              </Link>
+            </div>
           </div>
-        </aside>
+          <div className="hero-stats">
+            <div className="stats-showcase">
+              <div className="stat-orb primary-orb">
+                <div className="orb-content">
+                  <div className="orb-icon">
+                    <GlobeIcon className="stat-icon-svg" />
+                  </div>
+                  <div className="orb-data">
+                    <div className="orb-number">{heroStats[0].value}</div>
+                    <div className="orb-label">{heroStats[0].label}</div>
+                  </div>
+                </div>
+                <div className="orb-particles">
+                  <div className="particle particle-1"></div>
+                  <div className="particle particle-2"></div>
+                  <div className="particle particle-3"></div>
+                </div>
+              </div>
+
+              <div className="stat-orb secondary-orb">
+                <div className="orb-content">
+                  <div className="orb-icon">
+                    <SmallClockIcon className="stat-icon-svg" />
+                  </div>
+                  <div className="orb-data">
+                    <div className="orb-number">{heroStats[1].value}</div>
+                    <div className="orb-label">{heroStats[1].label}</div>
+                  </div>
+                </div>
+                <div className="orb-particles">
+                  <div className="particle particle-1"></div>
+                  <div className="particle particle-2"></div>
+                  <div className="particle particle-3"></div>
+                </div>
+              </div>
+
+              <div className="stat-orb tertiary-orb">
+                <div className="orb-content">
+                  <div className="orb-icon">
+                    <CheckIcon className="stat-icon-svg" />
+                  </div>
+                  <div className="orb-data">
+                    <div className="orb-number">{heroStats[2].value}</div>
+                    <div className="orb-label">{heroStats[2].label}</div>
+                  </div>
+                </div>
+                <div className="orb-particles">
+                  <div className="particle particle-1"></div>
+                  <div className="particle particle-2"></div>
+                  <div className="particle particle-3"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <section className="feature-mosaic">
-        <div className="section-heading">
+      <section className="features-section">
+        <div className="features-header">
           <h2>What you can do</h2>
           <p>
             Everything here reflects features available today—no fluff, just the core utilities that make timezone work
             easier.
           </p>
         </div>
-
-        <div className="feature-grid">
+        <div className="features-grid">
           {featureHighlights.map((feature) => {
             const { key, Icon, title, description, points, link, cta } = feature;
             return (
-              <article key={key} className="feature-card">
-                <span className="feature-icon" aria-hidden="true"><Icon className="feature-icon-svg" /></span>
-                <h3>{title}</h3>
-                <p>{description}</p>
-                <ul>
-                  {points.map((point) => (
-                    <li key={point}>{point}</li>
-                  ))}
-                </ul>
+              <div key={key} className="feature-card">
+                <div className="feature-header">
+                  <div className="feature-icon">
+                    <Icon className="feature-icon-svg" />
+                  </div>
+                  <h3>{title}</h3>
+                </div>
+                <div className="feature-body">
+                  <p>{description}</p>
+                  <div className="feature-points">
+                    {points.map((point) => (
+                      <span key={point} className="point-badge">{point}</span>
+                    ))}
+                  </div>
+                </div>
                 <Link to={link} className="feature-link">
                   {cta}
-                  <span aria-hidden="true"> →</span>
+                  <span className="link-arrow">→</span>
                 </Link>
-              </article>
+              </div>
             );
           })}
-        </div>
-      </section>
-
-      <section className="workflow">
-        <div className="section-heading">
-          <h2>How it fits together</h2>
-          <p>Move between clock, comparison, and conversion views to answer any “what time is it?” question fast.</p>
-        </div>
-
-        <ol className="workflow-steps">
-          {workflowSteps.map((step, index) => (
-            <li key={step.title}>
-              <span className="step-index">{index + 1}</span>
-              <div className="step-copy">
-                <h3>{step.title}</h3>
-                <p>{step.body}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      <section className="cta-band">
-        <div className="cta-copy">
-          <h2>Try it now</h2>
-          <p>
-            Jump into the clock, compare two places, or convert a date. No sign‑up—just useful tools.
-          </p>
-        </div>
-        <div className="cta-actions">
-          <Link to="/clock" className="cta primary">Open clock</Link>
-          <Link to="/convert" className="cta ghost">Convert time</Link>
         </div>
       </section>
     </div>

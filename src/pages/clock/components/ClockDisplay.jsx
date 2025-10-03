@@ -7,6 +7,7 @@ import CountrySelector from './CountrySelector';
 import FormatSwitcher from '../../../components/common/FormatSwitcher';
 import './ClockDisplay.css';
 import { createClockSearchParams, toClockSearchString } from '../../../utils/clockParams';
+import { ExpandIcon } from '../../../components/ui/Icons';
 
 const ClockDisplay = ({
   time,
@@ -153,7 +154,7 @@ const ClockDisplay = ({
             onClick={handleExpandClick}
           >
             <span className="sr-only">Open fullscreen clock view</span>
-            <span aria-hidden="true">⤢</span>
+            <ExpandIcon className="expand-icon-svg" />
           </button>
         )}
         {clockType === 'digital' && (

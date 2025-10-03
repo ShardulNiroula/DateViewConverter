@@ -128,8 +128,9 @@ const useTimeConversion = () => {
   const { format, setFormat } = useTimeFormat('24');
 
   const effectiveSourceFallback = currentTimezone || DEFAULT_SOURCE_FALLBACK;
+  const initialSource = normalizeTimezone(effectiveSourceFallback, presetTimezones, DEFAULT_SOURCE_FALLBACK);
 
-  const [sourceTimezone, setSourceTimezoneState] = useState(effectiveSourceFallback);
+  const [sourceTimezone, setSourceTimezoneState] = useState(initialSource);
   const [targetTimezone, setTargetTimezoneState] = useState(DEFAULT_TARGET_TIMEZONE);
   const [dateValue, setDateValue] = useState(() => moment().format('YYYY-MM-DD'));
   const [timeValues, setTimeValues] = useState(() => buildInitialTimeValues(format));

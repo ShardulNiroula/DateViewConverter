@@ -7,22 +7,10 @@
 }
 
 .analog-clock {
-  filter: drop-shadow(0 22px 45px rgba(17, 115, 212, 0.18));
   transition: transform var(--transition-fast), filter var(--transition-fast);
 }
 
-.analog-clock:hover {
-  transform: scale(1.015);
-  filter: drop-shadow(0 28px 55px rgba(17, 115, 212, 0.24));
-}
 
-[data-theme="dark"] .analog-clock {
-  filter: drop-shadow(0 22px 45px rgba(61, 167, 255, 0.22));
-}
-
-[data-theme="dark"] .analog-clock:hover {
-  filter: drop-shadow(0 28px 55px rgba(61, 167, 255, 0.28));
-}
 
 @media (max-width: 768px) {
   .analog-clock-container {

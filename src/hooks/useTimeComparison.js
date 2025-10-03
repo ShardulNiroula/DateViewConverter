@@ -8,7 +8,26 @@ import { buildTimezoneDisplay, formatOffsetLabel } from '../utils/timezoneDispla
 import { buildTimeDifferenceSummary } from '../utils/timeDifference';
 
 const DEFAULT_PRIMARY_TIMEZONE = 'UTC';
-const DEFAULT_SECONDARY_TIMEZONE = 'America/New_York';
+
+const getDefaultSecondaryTimezone = (primaryTimezone) => {
+  const region = primaryTimezone.split('/')[0];
+  switch (region) {
+    case 'America':
+      return 'Europe/London';
+    case 'Europe':
+      return 'America/New_York';
+    case 'Asia':
+      return 'Europe/London';
+    case 'Africa':
+      return 'Europe/London';
+    case 'Australia':
+      return 'America/New_York';
+    case 'Pacific':
+      return 'America/New_York';
+    default:
+      return 'America/New_York';
+  }
+};
 
 const normalizeTimezone = (timezone, presetTimezones) => {
   if (!presetTimezones?.length || !timezone) {
@@ -27,8 +46,12 @@ const useTimeComparison = () => {
   const { timezones: presetTimezones } = usePresetTimezones();
   const { format, setFormat } = useTimeFormat('24');
 
-  const [timezoneA, setTimezoneAState] = useState(() => currentTimezone || DEFAULT_PRIMARY_TIMEZONE);
-  const [timezoneB, setTimezoneBState] = useState(DEFAULT_SECONDARY_TIMEZONE);
+  // Normalize initial values against the preset list so dropdowns show a matching option immediately
+  const initialA = normalizeTimezone(currentTimezone || DEFAULT_PRIMARY_TIMEZONE, presetTimezones);
+  const initialB = normalizeTimezone(getDefaultSecondaryTimezone(initialA), presetTimezones);
+
+  const [timezoneA, setTimezoneAState] = useState(() => initialA);
+  const [timezoneB, setTimezoneBState] = useState(() => initialB);
   const [timezoneASelectedByUser, setTimezoneASelectedByUser] = useState(false);
 
   useEffect(() => {

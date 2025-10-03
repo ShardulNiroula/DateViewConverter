@@ -227,20 +227,27 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  border: 1px solid rgba(17, 115, 212, 0.3);
-  background: rgba(255, 255, 255, 0.85);
+  border: none;
+  background: transparent;
   color: var(--primary-color);
   font-size: 1.1rem;
   cursor: pointer;
   transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
-  box-shadow: var(--shadow-sm);
   z-index: 1000;
+}
+
+.expand-icon-svg {
+  width: 20px;
+  height: 20px;
+  transition: transform var(--transition-fast);
+}
+
+.clock-visual-expand:hover .expand-icon-svg {
+  transform: scale(1.1);
 }
 
 .clock-visual-expand:hover {
   transform: translateY(-1px) scale(1.03);
-  box-shadow: var(--shadow-md);
 }
 
 .clock-visual-expand:focus-visible {
@@ -248,11 +255,7 @@
   outline-offset: 2px;
 }
 
-[data-theme="dark"] .clock-visual-expand {
-  background: rgba(16, 25, 34, 0.9);
-  border-color: rgba(61, 167, 255, 0.35);
-  color: var(--primary-color);
-}
+
 
 [data-theme="dark"] .clock-visual {
   background: linear-gradient(135deg, rgba(61, 167, 255, 0.12) 0%, rgba(17, 115, 212, 0.08) 100%);

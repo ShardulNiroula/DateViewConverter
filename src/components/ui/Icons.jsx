@@ -44,4 +44,35 @@ export const ConvertIcon = ({ className = '', ...props }) => (
   </svg>
 );
 
+// Modern filled SVG icons for hero stats (globe, clock, check)
+export const GlobeIcon = ({ className = '', ...props }) => (
+  <svg viewBox="0 0 24 24" className={className} fill="none" {...props}>
+    <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.5" />
+    <path d="M2 12h20" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
+    <path d="M12 2c2.5 4 2.5 16 0 20" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
+  </svg>
+);
+
+export const SmallClockIcon = ({ className = '', ...props }) => (
+  <svg viewBox="0 0 24 24" className={className} fill="none" {...props}>
+    <circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="1.5" />
+    <path d="M12 8v4l3 1" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+export const CheckIcon = ({ className = '', ...props }) => (
+  <svg viewBox="0 0 24 24" className={className} fill="none" {...props}>
+    <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+export const ExpandIcon = ({ className = '', ...props }) => (
+  <svg viewBox="0 0 24 24" className={className} {...ICON_PROPS} {...props}>
+    <path d="M15 3h6v6" />
+    <path d="M9 21H3v-6" />
+    <path d="M21 3l-7 7" />
+    <path d="M3 21l7-7" />
+  </svg>
+);
+
 export default { HomeIcon, ClockIcon, CompareIcon, ConvertIcon };

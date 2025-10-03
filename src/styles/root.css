@@ -60,6 +60,48 @@
   --transition-fast: 0.15s ease-in-out;
   --transition-normal: 0.3s ease-in-out;
   --transition-slow: 0.5s ease;
+
+  /* Additional Colors for Home Page */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-light-blue: #e0e7ff;
+  --color-purple-gradient-start: #667eea;
+  --color-purple-gradient-end: #764ba2;
+  --color-blue-accent: rgba(102, 126, 234, 0.8);
+  --color-red-accent: rgba(255, 107, 107, 0.8);
+  --color-cyan-accent: rgba(72, 219, 251, 0.8);
+  --color-green-accent: rgba(21, 183, 158, 0.8);
+  --color-orange-accent: rgba(238, 90, 36, 0.8);
+  --color-teal-accent: rgba(46, 212, 191, 0.8);
+  --color-purple-accent: rgba(118, 75, 162, 0.8);
+
+  /* Inverse Colors */
+  --inverse-primary: #ffffff;
+  --inverse-secondary: #f8fafc;
+  --inverse-muted: #cbd5f5;
+  --inverse-accent: rgba(61, 167, 255, 0.1);
+  --inverse-border: #253344;
+  --inverse-border-light: #1e293b;
+  --white-10: rgba(255, 255, 255, 0.1);
+  --white-20: rgba(255, 255, 255, 0.2);
+  --white-30: rgba(255, 255, 255, 0.3);
+  --white-40: rgba(255, 255, 255, 0.4);
+  --white-70: rgba(255, 255, 255, 0.7);
+  --white-90: rgba(255, 255, 255, 0.9);
+  --black-08: rgba(0, 0, 0, 0.08);
+  --black-10: rgba(0, 0, 0, 0.1);
+  --black-12: rgba(0, 0, 0, 0.12);
+  --black-16: rgba(0, 0, 0, 0.16);
+  --black-20: rgba(0, 0, 0, 0.2);
+  --black-30: rgba(0, 0, 0, 0.3);
+  --black-45: rgba(0, 0, 0, 0.45);
+  --black-50: rgba(0, 0, 0, 0.5);
+  --black-65: rgba(0, 0, 0, 0.65);
+
+  /* Gradient Background Colors */
+  --gradient-primary: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-color-soft) 100%);
+  --gradient-purple: linear-gradient(135deg, var(--color-purple-gradient-start) 0%, var(--color-purple-gradient-end) 100%);
+  --gradient-text: linear-gradient(45deg, var(--color-white), var(--color-light-blue));
 }
 
 /* Dark Theme */
@@ -87,6 +129,23 @@
   --shadow-sm: 0 1px 2px rgba(8, 15, 28, 0.65);
   --shadow-md: 0 12px 30px rgba(8, 15, 28, 0.45);
   --shadow-lg: 0 25px 75px rgba(8, 15, 28, 0.5);
+
+  /* Dark theme variants for additional colors */
+  --color-blue-accent: rgba(61, 167, 255, 0.8);
+  --color-red-accent: rgba(251, 113, 133, 0.8);
+  --color-cyan-accent: rgba(56, 189, 248, 0.8);
+  --color-green-accent: rgba(45, 212, 191, 0.8);
+  --color-orange-accent: rgba(250, 204, 21, 0.8);
+  --color-teal-accent: rgba(45, 212, 191, 0.8);
+  --color-purple-accent: rgba(139, 92, 246, 0.8);
+
+  /* Inverse colors for dark theme */
+  --inverse-primary: #0b1120;
+  --inverse-secondary: #172230;
+  --inverse-muted: #7086a5;
+  --inverse-accent: rgba(17, 115, 212, 0.08);
+  --inverse-border: #d1d9e6;
+  --inverse-border-light: #e8edf5;
 }
 
 /* Base Styles */

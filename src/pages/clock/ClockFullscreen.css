@@ -1,7 +1,7 @@
 .clock-fullscreen {
   min-height: 100vh;
   width: 100%;
-  background: radial-gradient(circle at 20% 20%, rgba(17, 115, 212, 0.15), transparent 60%), var(--bg-primary);
+  background: var(--bg-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -9,14 +9,6 @@
   position: relative;
 }
 
-.clock-fullscreen::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 80% 10%, rgba(30, 136, 229, 0.12), transparent 55%);
-  pointer-events: none;
-  opacity: 0.85;
-}
 
 .clock-fullscreen-back {
   position: fixed;
