@@ -20,6 +20,11 @@ function AppContent() {
   const navigate = useNavigate();
   useBackButton();
 
+  // Scroll to top on route change
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
   // Additional global back button handler for redundancy
   React.useEffect(() => {
     const handleBackButtonGlobal = () => {
