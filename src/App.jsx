@@ -11,7 +11,8 @@ import SupportUs from './pages/supportUs/SupportUs';
 import { useBackButton } from './hooks/useBackButton';
 import { ModalProvider } from './contexts/ModalContext';
 import ExitConfirmationModal from './components/common/Modals/ExitConfirmationModal';
-import { useExitConfirmation } from './contexts/ModalContext';
+import OwnerModal from './components/common/Modals/OwnerModal';
+import { useExitConfirmation, useModal } from './contexts/ModalContext';
 import './App.css';
 
 // App content component that uses the modal context
@@ -48,7 +49,7 @@ function AppContent() {
 
   const { isOpen, openExitModal, closeExitModal, confirmExit } = useExitConfirmation();
 
-  // Close the exit modal if not on home page
+  const { getModalState, closeModal } = useModal();
   React.useEffect(() => {
     if (location.pathname !== '/') {
       closeExitModal();
@@ -88,6 +89,11 @@ function AppContent() {
         isOpen={isOpen}
         onClose={closeExitModal}
         onConfirmExit={handleConfirmExit}
+      />
+
+      <OwnerModal
+        isOpen={getModalState('owner').isOpen}
+        onClose={() => closeModal('owner')}
       />
     </>
   );

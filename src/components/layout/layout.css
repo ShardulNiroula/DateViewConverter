@@ -51,6 +51,7 @@
   color: var(--primary-color);
   text-decoration: none;
   min-width: 0;
+  user-select: none;
 }
 
 .brand-icon {
@@ -81,6 +82,7 @@
   font-size: 1.45rem;
   font-weight: var(--font-weight-bold);
   color: var(--text-primary);
+  user-select: none;
 }
 
 .brand-subtitle {
@@ -89,6 +91,7 @@
   color: var(--text-muted);
   line-height: 1.1;
   white-space: nowrap;
+  user-select: none;
 }
 
 .nav {

@@ -6,8 +6,24 @@
   width: 100%;
 }
 
+/* Ensure the clock container always stays a perfect square so the SVG circle remains circular */
+.analog-clock-container {
+  /* Use aspect-ratio when available to force 1:1 */
+  aspect-ratio: 1 / 1;
+  max-width: 100vmin; /* don't exceed the smaller viewport dimension */
+  margin: 0 auto;
+  overflow: hidden; /* hide any overflow so rounding stays perfect */
+}
+
 .analog-clock {
   transition: transform var(--transition-fast), filter var(--transition-fast);
+}
+
+/* Make the SVG fill the square container and keep the circle perfect */
+.analog-clock {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 
@@ -22,4 +38,28 @@
   .analog-clock-container {
     padding: clamp(12px, 6vw, 20px);
   }
+}
+
+/* When the analog clock is shown inside the visual card, keep it the
+   same footprint as the digital clock (which is 320px tall) so it
+   doesn't appear as large as the fullscreen clock. */
+.clock-visual .analog-clock-container {
+  /* match the digital clock container height */
+  height: 320px;
+  width: 100%;
+  max-width: 100%;
+  /* preserve square aspect */
+  aspect-ratio: 1 / 1;
+  /* use padding similar to digital clock for consistent spacing */
+  padding: clamp(24px, 3vw, 36px);
+}
+
+/* In fullscreen stage allow the clock to grow (fullscreen component
+   computes a large `size` and expects the svg to fill its container). */
+.clock-fullscreen .analog-clock-container,
+.clock-fullscreen-stage .analog-clock-container {
+  height: auto; /* allow the parent/size prop to drive size */
+  max-width: 100vmin;
+  aspect-ratio: 1 / 1;
+  padding: clamp(20px, 5vw, 48px);
 }

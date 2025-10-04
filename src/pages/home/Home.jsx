@@ -38,7 +38,7 @@ const featureHighlights = [
     Icon: ConvertIcon,
     title: 'Convert a Time',
     description:
-      'Enter a date and time in one timezone and convert it to another—daylight savings handled automatically.',
+      'Enter a date and time in one timezone and convert it to another. Daylight savings handled automatically.',
     points: [
       'Date + time input',
       '12h & 24h support',
@@ -46,6 +46,21 @@ const featureHighlights = [
     ],
     link: '/convert',
     cta: 'Convert time',
+  },
+  {
+    key: 'offline',
+    Icon: CheckIcon,
+    title: 'Works Offline',
+    description:
+      'Use most features without an internet connection once the app is loaded. Perfect for travel or areas with poor connectivity.',
+    points: [
+      'No internet needed after load',
+      'All timezone calculations local',
+      'Data may need updates occasionally',
+      'DST handling may need internet access occasionally',
+    ],
+    link: '#',
+    cta: '',
   },
 ];
 
@@ -64,7 +79,8 @@ const Home = () => {
     () => [
       { label: 'Supported zones', value: formattedSupportedZones },
       { label: 'Formats', value: '12 / 24h' },
-      { label: 'DST aware', value: 'Yes' }
+      { label: '', value: 'DST Aware' },
+      { label: '', value: 'Works Offline' }
     ],
     [formattedSupportedZones]
   );
@@ -178,6 +194,23 @@ const Home = () => {
                   <div className="particle particle-3"></div>
                 </div>
               </div>
+
+              <div className="stat-orb quaternary-orb">
+                <div className="orb-content">
+                  <div className="orb-icon">
+                    <CheckIcon className="stat-icon-svg" />
+                  </div>
+                  <div className="orb-data">
+                    <div className="orb-number">{heroStats[3].value}</div>
+                    <div className="orb-label">{heroStats[3].label}</div>
+                  </div>
+                </div>
+                <div className="orb-particles">
+                  <div className="particle particle-1"></div>
+                  <div className="particle particle-2"></div>
+                  <div className="particle particle-3"></div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -187,8 +220,7 @@ const Home = () => {
         <div className="features-header">
           <h2>What you can do</h2>
           <p>
-            Everything here reflects features available today—no fluff, just the core utilities that make timezone work
-            easier.
+            This section outlines the features available today, focusing on essential utilities designed to simplify timezone management.
           </p>
         </div>
         <div className="features-grid">
@@ -210,10 +242,12 @@ const Home = () => {
                     ))}
                   </div>
                 </div>
-                <Link to={link} className="feature-link">
-                  {cta}
-                  <span className="link-arrow">→</span>
-                </Link>
+                {cta && (
+                  <Link to={link} className="feature-link">
+                    {cta}
+                    <span className="link-arrow">→</span>
+                  </Link>
+                )}
               </div>
             );
           })}

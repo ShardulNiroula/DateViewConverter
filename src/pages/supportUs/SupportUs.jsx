@@ -82,6 +82,7 @@ const SupportUs = () => {
 
 	const handleDonationSubmit = (event) => {
 		event.preventDefault();
+		alert('Stripe integration coming soon!');
 	};
 
 	const handleCopyLink = () => {
@@ -117,9 +118,9 @@ const SupportUs = () => {
 							<button type="button" className="support-cta" onClick={handleCopyLink}>
 								Share OClock
 							</button>
-							<a className="support-cta ghost" href="mailto:hello@oclock.app?subject=OClock%20feedback">
+							<button type="button" className="support-cta ghost" onClick={() => alert('Feature coming soon!')}>
 								Send feedback
-							</a>
+							</button>
 						</div>
 						<dl className="support-pillars">
 							<div>
@@ -249,15 +250,13 @@ const SupportUs = () => {
 				<div className="support-grid">
 					{supportIdeas.map(({ key, label, description, actionLabel }) => {
 						let onClick;
-						let href;
-						let isExternal = false;
 
 						if (key === 'share') {
 							onClick = handleCopyLink;
 						} else if (key === 'feedback') {
-							href = 'mailto:hello@oclock.app?subject=OClock%20feedback';
+							onClick = () => alert('Feature coming soon!');
 						} else if (key === 'bugs') {
-							href = 'mailto:hello@oclock.app?subject=OClock%20bug%20report';
+							onClick = () => alert('Feature coming soon!');
 						} else if (key === 'coffee') {
 							onClick = scrollToDonation;
 						}
@@ -267,20 +266,9 @@ const SupportUs = () => {
 								<h3>{label}</h3>
 								<p>{description}</p>
 								<div className="support-card-action">
-									{onClick ? (
-										<button type="button" onClick={onClick} className="support-link">
-											{actionLabel}
-										</button>
-									) : (
-										<a
-											className="support-link"
-											href={href}
-											target={isExternal ? '_blank' : undefined}
-											rel={isExternal ? 'noopener noreferrer' : undefined}
-										>
-											{actionLabel}
-										</a>
-									)}
+									<button type="button" onClick={onClick} className="support-link">
+										{actionLabel}
+									</button>
 								</div>
 							</article>
 						);
@@ -296,9 +284,9 @@ const SupportUs = () => {
 						We read every message. Share how OClock fits into your day or what you would love to see next—we build from that
 						feedback.
 					</p>
-					<a className="support-cta" href="mailto:hello@oclock.app?subject=Say%20hello%20to%20OClock">
+					<button type="button" className="support-cta" onClick={() => alert('Feature coming soon!')}>
 						Write to us
-					</a>
+					</button>
 				</div>
 			</section>
 		</div>

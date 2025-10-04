@@ -9,6 +9,7 @@ const Modal = ({
   size = 'medium',
   className = '',
   showCloseButton = true,
+  disableBackdropClose = false,
   ...props
 }) => {
   useEffect(() => {
@@ -32,7 +33,7 @@ const Modal = ({
   if (!isOpen) return null;
 
   const handleBackdropClick = (event) => {
-    if (event.target === event.currentTarget) {
+    if (event.target === event.currentTarget && !disableBackdropClose) {
       onClose();
     }
   };

@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { useModal } from '../../contexts/ModalContext';
 
 const ICON_PROPS = {
   fill: 'none',
@@ -109,6 +110,9 @@ const NAV_LINKS = [
 const Header = () => {
   const [theme, setTheme] = useState('dark');
   const location = useLocation();
+  const navigate = useNavigate();
+  const { openModal } = useModal();
+  const logoClicksRef = useRef([]);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') || 'dark';
@@ -121,6 +125,25 @@ const Header = () => {
     setTheme(nextTheme);
     document.documentElement.setAttribute('data-theme', nextTheme);
     localStorage.setItem('theme', nextTheme);
+  };
+
+    const handleLogoClick = () => {
+    const now = Date.now();
+    const recentClicks = logoClicksRef.current.filter(click => now - click < 30000);
+    recentClicks.push(now);
+    logoClicksRef.current = recentClicks;
+    if (recentClicks.length >= 15) {
+      openModal('owner');
+      return true;
+    }
+    return false;
+  };
+
+  const handleBrandClick = () => {
+    const triggered = handleLogoClick();
+    if (!triggered) {
+      navigate('/');
+    }
   };
 
   const renderNavItems = ({ onNavigate, bottom } = {}) => (
@@ -190,7 +213,7 @@ const Header = () => {
     <>
       <header className="header">
         <div className="header-container">
-          <Link to="/" className="brand" aria-label="OClock home">
+          <div className="brand" onClick={handleBrandClick} onDoubleClick={(e) => e.preventDefault()} style={{ cursor: 'pointer' }} aria-label="OClock home">
             <div className="brand-icon" aria-hidden="true">
               <img src="/OCockLogo.svg" alt="OClock logo" />
             </div>
@@ -198,7 +221,7 @@ const Header = () => {
               <span className="brand-title">OClock</span>
               <span className="brand-subtitle">Where every second aligns with your goals.</span>
             </div>
-          </Link>
+          </div>
 
           <nav className="nav nav-desktop" aria-label="Primary navigation">
             {renderNavItems()}
